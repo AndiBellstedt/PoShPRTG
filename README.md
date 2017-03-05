@@ -1,6 +1,6 @@
 ![logo][]
 
-PoShPRTG
+PowerShell for PRTG - PoShPRTG
 ====================
 
 Welcome to the developing repository for PoShPRTG module.
