@@ -2,36 +2,45 @@
     <#
     .Synopsis
        Get-PRTGSensor
+
     .DESCRIPTION
        Returns one or more sensors from sensortree
+
+    .NOTES
        Author: Andreas Bellstedt
 
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
-       # Query all sensors from the default sensortree (global variable after connect to PRTG server)
        Get-PRTGSensor
-
-       # Query sensors by name from a non default sensortree
-       Get-PRTGSensor -SensorTree $SensorTree 
-
-    .EXAMPLE
-       # Query sensors by name
-       Get-PRTGSensor -Name "Sensor01"
-
-       # Multiple names are possible
-       Get-PRTGSensor -Name "Sensor01", "Sensor*"
-       
-       #Piping is also possible 
-       "Sensor01" | Get-PRTGSensor
+       Query all sensors from the default sensortree (global variable after connect to PRTG server)
     
     .EXAMPLE
-       # Query sensors by object ID
+       Get-PRTGSensor -SensorTree $SensorTree 
+       Query sensors by name from a non default sensortree
+
+    .EXAMPLE
+       Get-PRTGSensor -Name "Sensor01"
+       Query sensors by name
+
+       Get-PRTGSensor -Name "Sensor01", "Sensor*"
+       # Multiple names are possible
+       
+       "Sensor01" | Get-PRTGSensor
+       # Piping is also possible 
+
+    .EXAMPLE
        Get-PRTGSensor -ObjectId 1
+       Query sensors by object ID
+
        Get-PRTGSensor -ObjID 1, 100
        Get-PRTGSensor -ID 1, 100 -SensorTree $SensorTree 
-       
-       #Piping is also possible 
+       # Multiple IDs are possible
+
        1 | Get-PRTGSensor
-       
+       # Piping is also possible 
+
     #>
     [CmdletBinding(DefaultParameterSetName='ReturnAll',
                    SupportsShouldProcess=$false, 
@@ -54,7 +63,7 @@
                    Position=0)]
             [String[]]$Name,
 
-        # sensortree from PRTG Server 
+        # Sensortree from PRTG Server 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
             [xml]$SensorTree = $global:PRTGSensorTree 

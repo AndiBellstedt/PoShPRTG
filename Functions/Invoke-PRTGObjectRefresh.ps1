@@ -2,12 +2,19 @@
     <#
     .Synopsis
        Invoke-PRTGObjectRefresh
+
     .DESCRIPTION
        Enables an (paused) PRTG object 
+
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
        Invoke-PRTGObjectRefresh -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true, 

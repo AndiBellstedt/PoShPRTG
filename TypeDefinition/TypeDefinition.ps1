@@ -1,4 +1,6 @@
-﻿#region  PRTG
+﻿#Author: Andreas Bellstedt
+
+#region  PRTG
 $TypeName = "PRTG"
 Write-Verbose "Update TypeData $TypeName"
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -MemberName ObjID -Value { [int32]$this.id[0] } -Force

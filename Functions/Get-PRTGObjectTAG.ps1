@@ -2,11 +2,19 @@
     <#
     .Synopsis
        Get-PRTGObjectTAG
+
     .DESCRIPTION
        Get the tags property from an PRTG object out of the sensor tree and returns a string array
+
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
        Get-PRTGObjectTAG -ObjectId 1
+
     #>
     [CmdletBinding(DefaultParameterSetName='ReturnAll', 
                    SupportsShouldProcess=$false, 

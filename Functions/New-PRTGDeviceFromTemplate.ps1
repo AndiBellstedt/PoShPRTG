@@ -2,13 +2,23 @@
     <#
     .Synopsis
        New-PRTGDeviceFromTemplate
+
     .DESCRIPTION
-       Neues Gerät aus Vorlagenstruktur auf Neukunde deployen
+       Creates a new device out of a template structure, where operatingsystems and operatingsystem roles are separates in different templates.
+
+    .NOTES
+       Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+    
     .EXAMPLE
        New-PRTGDeviceFromTemplate
-       -> Benötigte Werte werden abgefragt
+       Required values will be queried by gridview-selection
+
     .EXAMPLE
-       New-PRTGDeviceFromTemplate -TemplateFolderStructure (Get-PRTGObject -Name "Name_Ordner_Vorlage") -ProbeNewCustomer (Get-PRTGProbes | Out-GridView -Title "Bitte Ziel-Probe auswählen" -OutputMode Single)
+       New-PRTGDeviceFromTemplate -TemplateFolderStructure (Get-PRTGObject -Name "Template_group_name") -Destination (Get-PRTGProbes | Out-GridView -Title "Please select destination for new system" -OutputMode Single)
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true, 

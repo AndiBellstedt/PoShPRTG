@@ -2,50 +2,64 @@
     <#
     .Synopsis
        Get-PRTGObject
+
     .DESCRIPTION
        Returns one more multiple types of objects from sensortree
+
+    .NOTES
        Author: Andreas Bellstedt
 
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
-       # Query all objects from the default sensortree (global variable after connect to PRTG server)
        Get-PRTGObject
+       Query all objects from the default sensortree (global variable after connect to PRTG server)
        
-       # Query objects by name from a non default sensortree
+    .EXAMPLE
        Get-PRTGObject -SensorTree $SensorTree 
+       Query objects by name from a non default sensortree
 
     .EXAMPLE
-       # Query objects by name
        Get-PRTGObject -Name "Object01"
+       Query objects by name
 
-       # Query objects by name with all subobjects
-       Get-PRTGObject -Name "Object01", "Object*" -Recursive
-       
-       # Query only selected type of objects by name
-       Get-PRTGObject -Name "Object01", "Object*" -Type 'probenode', 'group', 'device', 'sensor'
-       
-       # Query only selected type of objects by name with all subobjects
-       Get-PRTGObject -Name "Object01", "Object*" -Type 'probenode', 'group', 'device', 'sensor' -Recursive
-
-       # Query objects by name from a non default sensortree
-       Get-PRTGObject -Name "Object01", "Object*" -SensorTree $SensorTree 
-       
-       #Piping is also possible 
-       "Object01" | PRTGObject
-    
     .EXAMPLE
-       # Query objects by object ID
+       Get-PRTGObject -Name "Object01", "Object*" -Recursive
+       Query objects by name with all subobjects
+
+    .EXAMPLE
+       Get-PRTGObject -Name "Object01", "Object*" -Type 'probenode', 'group', 'device', 'sensor'
+       Query only selected type of objects by name
+       
+    .EXAMPLE
+       Get-PRTGObject -Name "Object01", "Object*" -Type 'probenode', 'group', 'device', 'sensor' -Recursive
+       Query only selected type of objects by name with all subobjects
+
+       Get-PRTGObject -Name "Object01", "Object*" -SensorTree $SensorTree 
+       # Query objects by name from a non default sensortree
+
+       "Object01" | PRTGObject
+       # Piping is also possible 
+
+    .EXAMPLE
        Get-PRTGObject -ObjectID 1
+       Query objects by object ID
+
        Get-PRTGObject -ObjID 1 , 100
        Get-PRTGObject -ID 1, 100
        # all the parameter combination from the example above are also possible
 
-       #Piping is also possible 
        1 | Get-PRTGObject
+       # Piping is also possible 
 
     .EXAMPLE
-       #for people who know what they do... query objects directly by XPatch filter string
        Get-PRTGObject -FilterXPath "/prtg/sensortree/nodes/group//*[id='1']"
+       #for people who know what they do... :-)
+       #query objects directly by XPatch filter string 
+
        Get-PRTGObject -FilterXPath "/prtg/sensortree/nodes/group//probenode" -SensorTree $SensorTree 
+
     #>
     [CmdletBinding(DefaultParameterSetName='ReturnAll',
                    SupportsShouldProcess=$false, 
@@ -119,11 +133,9 @@
         }
         #Write-Host "$ParameterSet - $ObjectID" -ForegroundColor Green
 
-        #switch ($PsCmdlet.ParameterSetName) {
         switch ($ParameterSet) {
             'ID' {
                 foreach($ID in $ObjectId) {
-                    #Write-Log -LogText "Query logic is:$($PsCmdlet.ParameterSetName). Going to find the object by ID value." -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     Write-Log -LogText "Query logic is:$($ParameterSet). Going to find the object by ID $($ID) value." -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     [string]$BasePath = "/prtg/sensortree/nodes/group//*[id=$($ID)]"
                     $SeachString = $BasePath
@@ -143,7 +155,6 @@
 
             'Name' {
                 foreach($NameItem in $Name) {
-                    #Write-Log -LogText "Query logic is:$($PsCmdlet.ParameterSetName). Going to find the object by Name value." -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     Write-Log -LogText "Query logic is:$($ParameterSet). Going to find the object by Name ""$($Name)"" value." -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     #assume find object directly no filtering after xpath needed
                     $FilterAfterQuery = $false
@@ -167,7 +178,6 @@
                     Write-Log -LogText "Searchstring for query on sensortree: $SeachString." -LogType Info -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     if($FilterAfterQuery -and (-not $Recursive)) {
                         $result += $SensorTree.SelectNodes($SeachString) | Where-Object Name -Like $NameItem 
-                        #$SensorTree.SelectNodes($SeachString) | Where-Object Name -Like $NameItem  | Measure-Object
                     } elseif($FilterAfterQuery -and $Recursive) {
                         $group = $SensorTree.SelectNodes($SeachString) | Where-Object Name -Like $NameItem | Group-Object type
                         $subResult = @()
@@ -198,7 +208,6 @@
             'Fullname' {
                 foreach($FullnameItem in $Fullname) {
                     if($Recursive) { $FullnameItem = "*$FullnameItem*" }
-                    #Write-Log -LogText "Query logic is:$($PsCmdlet.ParameterSetName). Going to find the object by FullName ""$($FullnameItem)"" value." -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     Write-Log -LogText "Query logic is:$($ParameterSet). Going to find the object by FullName ""$($FullnameItem)"" value." -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     [string]$BasePath = '/prtg/sensortree/nodes/group'
                     $Count = 0
@@ -222,7 +231,7 @@
                     Remove-Variable item -Force -ErrorAction Ignore
                     
                     foreach($search in $FullnameItem) { 
-                        $result += $objectsCollection | Where-Object fullname -Like $search  #Where-Object Fullname -like $search
+                        $result += $objectsCollection | Where-Object fullname -Like $search
                     }
                     Write-Log -LogText "Found $($result.Count) $([string]::Join('s,',$Type))s in sensortree." -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     Remove-Variable Count, item, SeachString, BasePath -Force -ErrorAction Ignore -Verbose:$false -Debug:$false -WhatIf:$false
@@ -231,7 +240,6 @@
 
             'XPath' {
                 foreach($XPath in $FilterXPath) {
-                    #Write-Log -LogText "Query logic is:$($PsCmdlet.ParameterSetName). Returning all objects with filterstring: ""$XPath""" -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     Write-Log -LogText "Query logic is:$($ParameterSet). Returning all objects with filterstring: ""$($XPath)""" -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                     $result = $SensorTree.SelectNodes($XPath) 
                     Write-Log -LogText "Found $($result.Count) objects in sensortree." -LogType Info -LogScope $Local:logscope -NoFileStatus -DebugOutput
@@ -240,7 +248,6 @@
 
             Default {
                 Write-Log -LogText "Query logic is:$($ParameterSet). Returning all objects" -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
-                #Write-Log -LogText "Query logic is:$($PsCmdlet.ParameterSetName). Returning all objects" -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
                 [string]$BasePath = '/prtg/sensortree/nodes/group'
                 $Count = 0
                 foreach($item in $Type) {

@@ -2,13 +2,23 @@
     <#
     .Synopsis
        Set-PRTGObjectAlamAcknowledgement
+
     .DESCRIPTION
        Acknowledge an alarm on a PRTG object 
+    
+    .NOTES
        Author: Andreas Bellstedt
 
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
-       Set-PRTGObjectAlamAcknowledgement -ObjectId 1 
+       Set-PRTGObjectAlamAcknowledgement -ObjectId 1
+    
+    .EXAMPLE
        Set-PRTGObjectAlamAcknowledgement -ObjectId 1 -Message "Done by User01"
+    
+    .EXAMPLE
        Set-PRTGObjectAlamAcknowledgement -ObjectId 1 -Message "Done by User01" -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
     #>

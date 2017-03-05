@@ -2,15 +2,26 @@
     <#
     .Synopsis
        Set-PRTGObjectProperty
+
     .DESCRIPTION
        Set the property of an PRTG object
+    
+    .NOTES
        Author: Andreas Bellstedt
 
        adopted from PSGallery Module "PSPRTG"
        Author: Sam-Martin
        Github: https://github.com/Sam-Martin/prtg-powershell
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
-       Set-PRTGObjectProperty -ObjectId 1 -TargetID 2 -Name "NewName" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
+       Set-PRTGObjectProperty -ObjectId 1 -PropertyName "Name" -PropertyValue "NewValue"
+
+    .EXAMPLE
+       Set-PRTGObjectProperty -ObjectId 1 -PropertyName "Name" -PropertyValue "NewValue" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true, 
@@ -92,7 +103,7 @@
                 
                 #Write-Output
                 if($PassThru) {
-                    write-output (Get-PRTGObject -ObjectID $id -SensorTree $SensorTree -Verbose:$false)
+                    Write-Output (Get-PRTGObject -ObjectID $id -SensorTree $SensorTree -Verbose:$false)
                 }
             }
         }

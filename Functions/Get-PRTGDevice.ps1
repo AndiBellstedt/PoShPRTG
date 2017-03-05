@@ -2,35 +2,45 @@
     <#
     .Synopsis
        Get-PRTGDevice
+
     .DESCRIPTION
        Returns one or more devices from sensortree
+
+    .NOTES
        Author: Andreas Bellstedt
 
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
-       # Query all devices from the default sensortree (global variable after connect to PRTG server)
        Get-PRTGDevice
+       Query all devices from the default sensortree (global variable after connect to PRTG server)
 
-       # Query devices by name from a non default sensortree
+    .EXAMPLE   
        Get-PRTGDevice -SensorTree $SensorTree 
+       Query devices by name from a non default sensortree
 
     .EXAMPLE
-       # Query devices by name
        Get-PRTGDevice -Name "Device01"
+       Query devices by name
 
-       # Multiple names are possible
        Get-PRTGDevice -Name "Device01", "Device*"
-       
-       #Piping is also possible 
+       # Multiple names are possible
+
        "Device01" | Get-PRTGDevice
-    
+       # Piping is also possible 
+
     .EXAMPLE
-       # Query devices by object ID
        Get-PRTGDevice -ObjectId 1
+
+       Query devices by object ID
+
        Get-PRTGDevice -ObjID 1, 100
-       Get-PRTGDevice -ID 1, 100 -SensorTree $SensorTree 
+       Get-PRTGDevice -ID 1, 100 -SensorTree $SensorTree
+       # Multiple names are possible
        
-       #Piping is also possible 
        1 | Get-PRTGDevice
+       # Piping is also possible 
        
     #>
     [CmdletBinding(DefaultParameterSetName='ReturnAll',

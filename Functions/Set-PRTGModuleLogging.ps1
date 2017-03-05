@@ -1,16 +1,23 @@
 ﻿function Set-PRTGModuleLogging {
     <#
     .Synopsis
-       Kurzbeschreibung
+       Set-PRTGModuleLogging
+
     .DESCRIPTION
-       Lange Beschreibung
+       %ToDo%
+
+    .NOTES
+       Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
-       Beispiel für die Verwendung dieses Cmdlets
-    .EXAMPLE
-       Ein weiteres Beispiel für die Verwendung dieses Cmdlets
+       %ToDo%
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default', 
-                   SupportsShouldProcess=$false, 
+                   SupportsShouldProcess=$true, 
                    ConfirmImpact='Medium')]
     Param(
         # Enables or disables logging of warning messages to $WarnLogFile

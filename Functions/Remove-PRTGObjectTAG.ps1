@@ -2,12 +2,19 @@
     <#
     .Synopsis
        Remove-PRTGObjectTAG
+
     .DESCRIPTION
        Remove a text from the tags property of an PRTG object
+    
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
        Remove-PRTGObjectTAG -ObjectId 1 -TAGName "NewName" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true, 

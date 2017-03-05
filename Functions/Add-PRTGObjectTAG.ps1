@@ -2,13 +2,23 @@
     <#
     .Synopsis
        Add-PRTGObjectTAG
+
     .DESCRIPTION
        Add a text to the tags property of an PRTG object
+
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
        Add-PRTGObjectTAG -ObjectId 1 -TAGName "NewName"
+
+    .EXAMPLE
        Add-PRTGObjectTAG -ObjectId 1 -TAGName "NewName" -PassThru
+    
+    .EXAMPLE
        Add-PRTGObjectTAG -ObjectId 1 -TAGName "NewName" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111" -SensorTree $PRTGSensorTree -PassThru
 
     #>

@@ -2,22 +2,33 @@
     <#
     .Synopsis
        Remove-PRTGObject
+
     .DESCRIPTION
        Remove an object from PRTGserver and returns.
        Difference to Get-PRTGObject is, that "Get-PRTGObject" is working on a modfified sensortree variable in the memory and not on livedata from PRTGServer
+
+    .NOTES
        Author: Andreas Bellstedt
 
        adopted from PSGallery Module "PSPRTG"
        Author: Sam-Martin
        Github: https://github.com/Sam-Martin/prtg-powershell
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
        Receive-PRTGObject -ObjectId 1
+       
        Receive-PRTGObject -ID 1
        Receive-PRTGObject 1
+
     .EXAMPLE
        Receive-PRTGObject -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+       
        Receive-PRTGObject -ID 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
        Receive-PRTGObject 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default', 
                   SupportsShouldProcess=$true, 

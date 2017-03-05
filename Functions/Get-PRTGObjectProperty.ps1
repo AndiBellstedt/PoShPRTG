@@ -2,13 +2,22 @@
     <#
     .Synopsis
        Get-PRTGObjectProperty
+
     .DESCRIPTION
        Get a specific property from an PRTG object out of the sensor tree
+
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
        Get-PRTGObjectProperty -ObjectId 1 -PropertyName Name, tags 
+
     .EXAMPLE
        Get-PRTGObjectProperty -ID 1 -Name Name, status
+
     #>
     [CmdletBinding(DefaultParameterSetName='ReturnAll', 
                    SupportsShouldProcess=$false, 
@@ -54,7 +63,8 @@
 
             $ObjectProperty = $Object | Get-Member -MemberType Property, NoteProperty | Select-Object -ExpandProperty Name
             $hash = @{}
-            if($PropertyName) { #Parameterset: Name
+            if($PropertyName) {
+                #Parameterset: Name
                 foreach($item in $PropertyName) {
                     $PropertiesToQuery = $ObjectProperty | Where-Object { $_ -like $item }
                     foreach($PropertyItem in $PropertiesToQuery) { 
@@ -67,7 +77,8 @@
                     }
                 }
                 $result = New-Object -TypeName PSCustomObject -Property $hash
-            } else { #Parameterset: ReturnAll
+            } else {
+                #Parameterset: ReturnAll
                 Write-Log -LogText "Get all properties from object ID $ID" -LogType Info -LogScope $Local:logscope -NoFileStatus -DebugOutput
                 foreach($PropertyItem in $ObjectProperty) { 
                     $hash.Add($PropertyItem, $object.$PropertyItem)

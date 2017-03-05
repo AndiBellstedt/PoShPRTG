@@ -2,16 +2,23 @@
     <#
     .Synopsis
        Disconnect-PRTGServer
+
     .DESCRIPTION
        Clears globale variables from memory
        Globale Variablen: 
             $global:PRTGServer
             $global:PRTGUser
             $global:PRTGPass
+
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
        Disconnect-PRTGServer
+
     #>
     [CmdletBinding(SupportsShouldProcess=$false, 
                    ConfirmImpact='medium')]

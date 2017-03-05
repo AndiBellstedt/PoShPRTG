@@ -18,6 +18,9 @@
             $global:PRTGPass
             $global:PRTGSensorTree (created through cmdlet Invoke-PRTGSensorTreeRefresh)
 
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
        $ServerName = "PRTG.CORP.COMPANY.COM"
        $Credential = Get-Credential "prtgadmin"
@@ -25,8 +28,7 @@
        Connect-PRTGServer -Server $ServerName -protocol HTTPS -Credential $Credential
        
        #with output the connection data
-       $connection = Connect-PRTGServer -Server $ServerName -protocol HTTPS -Credential $Credential 
-       -PassThru 
+       $connection = Connect-PRTGServer -Server $ServerName -protocol HTTPS -Credential $Credential -PassThru 
 
     .EXAMPLE
        $ServerName = "PRTG.CORP.COMPANY.COM"
@@ -42,7 +44,7 @@
                    ConfirmImpact='Low')]
     [OutputType([XML])]
     Param(
-        # Hilfebeschreibung zu Param1
+        # Url for PRTG Server
         [Parameter(Mandatory=$true,
                    ValueFromPipeline=$true,
                    ValueFromPipelineByPropertyName=$true,

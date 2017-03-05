@@ -9,6 +9,9 @@
     .NOTES
        Author: Andreas Bellstedt
 
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
        Show-PRTGTemplateSummaryFromObjectTAG
        Display list of tags witch began with "Template_" and can be found under PRTG Core Server object. 

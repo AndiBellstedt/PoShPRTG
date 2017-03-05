@@ -2,23 +2,30 @@
     <#
     .Synopsis
        Find-PRTGObject
+
     .DESCRIPTION
        Find objects from sensortree by various criteria
+
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
        Find-PRTGObject -ByTAGName "Server"
        Find-PRTGObject -ByTAGName "Template_*" -IncludeInherited
-       
+
        Find-PRTGObject -ByTAGName "Template_*", "Server"
-    
-    .EXAMPLE   
+
+    .EXAMPLE
        Find-PRTGObject -ByStatus "Warning"
        Find-PRTGObject -ByStatus 'Paused by User', "Down"
     
-    .EXAMPLE   
+    .EXAMPLE
        Find-PRTGObject -BySensorType POP3
-       Find-PRTGObject -BySensorType POP3, DNS       
+       Find-PRTGObject -BySensorType POP3, DNS
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$false, 

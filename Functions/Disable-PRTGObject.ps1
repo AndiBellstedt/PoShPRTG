@@ -2,18 +2,26 @@
     <#
     .Synopsis
        Disable-PRTGObject
+
     .DESCRIPTION
        Pause an PRTG object 
+
+    .NOTES
        Author: Andreas Bellstedt
 
        adopted from PSGallery Module "PSPRTG"
        Author: Sam-Martin
        Github: https://github.com/Sam-Martin/prtg-powershell
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+    
     .EXAMPLE
        Disable-PRTGObject -ObjectId 1 
        Disable-PRTGObject -ObjectId 1 -Message "Done by User01"
        Disable-PRTGObject -ObjectId 1 -Message "Done by User01" -Minutes 1
        Disable-PRTGObject -ObjectId 1 -Message "Done by User01" -Minutes 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+    
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true, 

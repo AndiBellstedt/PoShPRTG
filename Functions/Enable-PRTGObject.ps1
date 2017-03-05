@@ -2,16 +2,24 @@
     <#
     .Synopsis
        Enable-PRTGObject
+
     .DESCRIPTION
        Enables an (paused) PRTG object 
+
+    .NOTES
        Author: Andreas Bellstedt
 
        adopted from PSGallery Module "PSPRTG"
        Author: Sam-Martin
        Github: https://github.com/Sam-Martin/prtg-powershell
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
        Enable-PRTGObject -ObjectId 1
        Enable-PRTGObject -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true, 
@@ -51,7 +59,7 @@
         [ValidateNotNullOrEmpty()]
             [String]$Pass = $global:PRTGPass,
         
-        # sensortree from PRTG Server 
+        # Sensortree from PRTG Server 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
             [xml]$SensorTree = $global:PRTGSensorTree

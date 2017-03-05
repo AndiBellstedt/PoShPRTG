@@ -2,14 +2,22 @@
     <#
     .Synopsis
        Receive-PRTGObjectDetail
+
     .DESCRIPTION
        Query status information for an object directly from PRTGserver.
        (function not working on sensortree variable in memory)
+    
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
        Receive-PRTGObjectDetail -ObjectId 1 
+
        Receive-PRTGObjectDetail -ID 1 
+
     .EXAMPLE
        Receive-PRTGObjectDetail -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
     #>

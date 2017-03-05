@@ -2,14 +2,22 @@
     <#
     .Synopsis
        Get-PRTGSensorTree
+
     .DESCRIPTION
-       Ruft den aktuellen SensorTree vom PRTG Server ab
+       Return the current sensortree from PRTG Server
+
+    .NOTES
+       Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
        Get-PRTGSensorTree
 
     .EXAMPLE
-       Get-PRTGSensorTree -Server "https://prtg.corp.customer.com"
+       Get-PRTGSensorTree -Server "https://prtg.corp.customer.com" -User "prtgadmin" -Pass "1111111"
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$false, 

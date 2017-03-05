@@ -2,36 +2,44 @@
     <#
     .Synopsis
        Get-PRTGGroup
+
     .DESCRIPTION
        Returns one or more groups from sensortree
+
+    .NOTES
        Author: Andreas Bellstedt
 
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
-       # Query all groups from the default sensortree (global variable after connect to PRTG server)
        Get-PRTGGroup
-
-       # Query groups by name from a non default sensortree
-       Get-PRTGGroup -SensorTree $SensorTree 
-
-    .EXAMPLE
-       # Query groups by name
-       Get-PRTGGroup -Name "Group01"
-
-       # Multiple names are possible
-       Get-PRTGGroup -Name "Group01", "Group*"
-       
-       #Piping is also possible 
-       "Group01" | Get-PRTGGroup
+       Query all groups from the default sensortree (global variable after connect to PRTG server)
     
     .EXAMPLE
-       # Query groups by object ID
+       Get-PRTGGroup -SensorTree $SensorTree 
+       Query groups by name from a non default sensortree
+
+    .EXAMPLE
+       Get-PRTGGroup -Name "Group01"
+       Query groups by name
+
+       Get-PRTGGroup -Name "Group01", "Group*"
+       # Multiple names are possible
+       
+       "Group01" | Get-PRTGGroup
+       # Piping is also possible 
+    
+    .EXAMPLE
        Get-PRTGGroup -ObjectId 1
+       Query groups by object ID
+
        Get-PRTGGroup -ObjID 1, 100
        Get-PRTGGroup -ID 1, 100 -SensorTree $SensorTree 
-       
-       #Piping is also possible 
+       # Multiple IDs are possible
+
        1 | Get-PRTGGroup
-       
+       # Piping is also possible 
     #>
     [CmdletBinding(DefaultParameterSetName='ReturnAll',
                    SupportsShouldProcess=$false, 

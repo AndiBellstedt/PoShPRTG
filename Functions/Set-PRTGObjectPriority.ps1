@@ -4,12 +4,22 @@
        Set-PRTGObjectPriority
     .DESCRIPTION
        Set priority value on a PRTG object 
+
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
        Set-PRTGObjectPriority -ObjectId 1 -Priority 3
-
+    
+    .EXAMPLE
+       Set-PRTGObjectPriority -ObjectId 1 -Priority 3 -PassThru
+    
+    .EXAMPLE
        Set-PRTGObjectPriority -ObjectId 1 -Priority 3 -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true, 

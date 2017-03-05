@@ -2,35 +2,44 @@
     <#
     .Synopsis
        Get-PRTGProbe
+
     .DESCRIPTION
        Returns one or more probes from sensortree
+
+    .NOTES
        Author: Andreas Bellstedt
 
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
-       # Query all probes from the default sensortree (global variable after connect to PRTG server)
        Get-PRTGProbe
+       Query all probes from the default sensortree (global variable after connect to PRTG server)
 
-       # Query probes by name from a non default sensortree
        Get-PRTGProbe -SensorTree $SensorTree 
+       Query probes by name from a non default sensortree
 
     .EXAMPLE
-       # Query probes by name
        Get-PRTGProbe -Name "Probe01"
-
-       # Multiple names are possible
-       Get-PRTGProbe -Name "Probe01", "Probe*"
+       Query probes by name
        
-       #Piping is also possible 
+       Get-PRTGProbe -Name "Probe01", "Probe*"
+       # Multiple names are possible
+
        "Probe01" | Get-PRTGProbe
-    
+       # Piping is also possible
+        
     .EXAMPLE
-       # Query probes by object ID
+       
        Get-PRTGProbe -ObjectId 1
+       Query probes by object ID
+
        Get-PRTGProbe -ObjID 1, 100
        Get-PRTGProbe -ID 1, 100 -SensorTree $SensorTree 
+       # Multiple IDs are possible
        
-       #Piping is also possible 
        1 | Get-PRTGProbe
+       # Piping is also possible 
        
     #>
     [CmdletBinding(DefaultParameterSetName='ReturnAll',

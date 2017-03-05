@@ -2,19 +2,28 @@
     <#
     .Synopsis
        Receive-PRTGObject
+
     .DESCRIPTION
        Query an object property directly from PRTGserver and returns.
        Difference to Get-PRTGObjectProperty is, that "Get-PRTGObjectProperty" is working on a modfified sensortree variable in the memory and not on livedata from PRTGServer
+
+    .NOTES
        Author: Andreas Bellstedt
 
        adopted from PSGallery Module "PSPRTG"
        Author: Sam-Martin
        Github: https://github.com/Sam-Martin/prtg-powershell
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
        Receive-PRTGObject -ObjectId 1 -PropertyName "staus"
        Receive-PRTGObject -ID 1 -Name "staus"
+
     .EXAMPLE
        Receive-PRTGObject -ObjectId 1 -PropertyName "staus" -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default', 
                   SupportsShouldProcess=$false, 

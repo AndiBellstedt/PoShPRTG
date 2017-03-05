@@ -2,9 +2,15 @@
     <#
     .Synopsis
        Test-PRTGObjectNotification
+
     .DESCRIPTION
        Test a notifcation action for a object
+    
+    .NOTES
        Author: Andreas Bellstedt
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
        Test-PRTGObjectNotification -ObjectId 1

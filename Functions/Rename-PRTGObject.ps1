@@ -2,17 +2,26 @@
     <#
     .Synopsis
        Rename-PRTGObject
+
     .DESCRIPTION
        Rename an PRTG object 
+
+    .NOTES
        Author: Andreas Bellstedt
 
        adopted from PSGallery Module "PSPRTG"
        Author: Sam-Martin
        Github: https://github.com/Sam-Martin/prtg-powershell
+
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
        Rename-PRTGObject -ObjectId 1
-
+    
+    .EXAMPLE
        Rename-PRTGObject -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true, 

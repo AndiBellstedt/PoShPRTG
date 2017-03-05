@@ -2,14 +2,20 @@
     <#
     .Synopsis
        Move-PRTGObjectPosition
+
     .DESCRIPTION
        Moves an object in PRTG hierarchy
+
+    .NOTES
        Author: Andreas Bellstedt
 
+    .LINK
+       https://github.com/AndiBellstedt/PoShPRTG
+
     .EXAMPLE
-       Move-PRTGObject -ObjectId 1 
-       Move-PRTGObject -ObjectId 1 -Message "Done by User01"
-       Move-PRTGObject -ObjectId 1 -Message "Done by User01" -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+       Move-PRTGObject -ObjectId 1 -Direction up
+       
+       Move-PRTGObject -ObjectId 1 -Direction down -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
