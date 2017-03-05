@@ -1,4 +1,6 @@
-![logo][] PoShPRTG
+![logo][]
+
+PoShPRTG
 ====================
 
 Welcome to the developing repository for PoShPRTG module.
