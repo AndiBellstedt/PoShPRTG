@@ -25,4 +25,4 @@ After then the collection of functions was growing and growing so I decided to p
 Hopefully some other people may benefit from my work and investigation.
 
 
-[logo]: assets/PoShPrtg_128x128.png
+[logo]: assets/PoShPrtg_256x256.png
