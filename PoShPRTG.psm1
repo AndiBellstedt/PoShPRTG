@@ -1,4 +1,15 @@
-﻿#region basic functions
+﻿#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Modul "PoShPRTG"
+# Author:  Andreas Bellstedt
+
+#region basic functions
+#----------------------
     <#
     Basic functions are mostly adopted from the PRTG API documentation.
 
@@ -42,6 +53,7 @@
 
 
 #region Rollout- / Deployment functions
+#--------------------------------------
 . $psscriptroot\Functions\New-PRTGDefaultFolderStructureToProbe.ps1
 . $psscriptroot\Functions\New-PRTGDeviceFromTemplate.ps1
 
@@ -49,9 +61,7 @@
 
 
 #region Helper functions
-#----------------
-#. $psscriptroot\Helper\Initialize-Datastructure.ps1
-#. $psscriptroot\Helper\Add-TypesNamesToPRTGObject.ps1
+#-----------------------
 . $psscriptroot\Helper\Write-Log.ps1
 . $psscriptroot\Helper\Set-TypesNamesToPRTGObject.ps1
 . $psscriptroot\Helper\Compare-ObjectProperty.ps1
@@ -60,24 +70,33 @@
 
 
 #region TypeData Definition
-#-------------------
+#--------------------------
 . $psscriptroot\TypeDefinition\TypeDefinition.ps1
 
 #endregion
 
 
 #region function template for new cmdlets
-
+#----------------------------------------
 #function Use-Template {
 #    <#
 #    .Synopsis
-#       Kurzbeschreibung
+#       %ToDo%
+#
 #    .DESCRIPTION
-#       Lange Beschreibung
+#       %ToDo%
+#
+#    .NOTES
+#       Author: Andreas Bellstedt
+#
+#    .LINK
+#       https://github.com/AndiBellstedt/PoShPRTG
+#
 #    .EXAMPLE
-#       Beispiel für die Verwendung dieses Cmdlets
+#       %ToDo%
+#
 #    .EXAMPLE
-#       Ein weiteres Beispiel für die Verwendung dieses Cmdlets
+#       %ToDo% -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 #    #>
 #    [CmdletBinding(DefaultParameterSetName='Default', 
 #                  SupportsShouldProcess=$true, 
