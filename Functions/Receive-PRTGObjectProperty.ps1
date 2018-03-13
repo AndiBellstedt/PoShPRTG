@@ -50,17 +50,17 @@
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({if( ($_.StartsWith("http")) ){$true}else{$false}})]
-            [String]$Server = $global:PRTGServer,
+            [String]$Server = $SCRIPT:PRTGServer,
 
         # User for PRTG Authentication
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [String]$User = $global:PRTGUser,
+            [String]$User = $SCRIPT:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [String]$Pass = $global:PRTGPass
+            [String]$Pass = $SCRIPT:PRTGPass
     )
     Begin {
         $Local:logscope = $MyInvocation.MyCommand.Name

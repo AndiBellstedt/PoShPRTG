@@ -6,9 +6,9 @@
     .DESCRIPTION
        Clears globale variables from memory
        Globale Variablen: 
-            $global:PRTGServer
-            $global:PRTGUser
-            $global:PRTGPass
+            $SCRIPT:PRTGServer
+            $SCRIPT:PRTGUser
+            $SCRIPT:PRTGPass
 
     .NOTES
        Author: Andreas Bellstedt

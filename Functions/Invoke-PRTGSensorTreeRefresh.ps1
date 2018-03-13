@@ -28,19 +28,19 @@
                    Position=0)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({if( ($_.StartsWith("http")) ){$true}else{$false}})]
-            [String]$Server = $global:PRTGServer, 
+            [String]$Server = $SCRIPT:PRTGServer, 
 
         # User for PRTG Authentication
         [Parameter(Mandatory=$false,
                    Position=1)]
         [ValidateNotNullOrEmpty()]
-            [String]$User = $global:PRTGUser,
+            [String]$User = $SCRIPT:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
         [Parameter(Mandatory=$false,
                    Position=2)]
         [ValidateNotNullOrEmpty()]
-            [String]$Pass = $global:PRTGPass,
+            [String]$Pass = $SCRIPT:PRTGPass,
 
         [Parameter(Mandatory=$false)]
             [Switch]$PassThru
@@ -49,7 +49,7 @@
 
     Write-Log -LogText "Refresh PRTG SensorTree in Memory" -LogType Query -LogScope $Local:logscope -NoFileStatus -DebugOutput
     $Result = Get-PRTGSensorTree -Server $Server -User $User -Pass $Pass -Verbose:$false
-    $global:PRTGSensorTree = $Result
+    $SCRIPT:PRTGSensorTree = $Result
 
     if($PassThru) { return $Result }
 }

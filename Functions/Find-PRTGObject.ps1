@@ -56,7 +56,7 @@
         # sensortree from PRTG Server 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [xml]$SensorTree = $global:PRTGSensorTree 
+            [xml]$SensorTree = $SCRIPT:PRTGSensorTree 
     )
     Begin {
         $Local:logscope = $MyInvocation.MyCommand.Name

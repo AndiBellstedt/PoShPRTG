@@ -4,8 +4,8 @@
        Connect-PRTGServer
 
     .DESCRIPTION
-       Connect to PRTG Server, creates global variables with connection data and the current sensor tree from PRTG Core Server.
-       The global variables are used as default parameters in other PRTG-module cmdlets to interact with PRTG.
+       Connect to PRTG Server, creates module-scope variables with connection data and the current sensor tree from PRTG Core Server.
+       The module-scope variables are used as default parameters in other PRTG-module cmdlets to interact with PRTG.
        
        Connect-PRTGServer needs to be run at first when starting to work.
     
@@ -13,10 +13,10 @@
        Author: Andreas Bellstedt
 
        Created global Variables by the cmdlet:
-            $global:PRTGServer
-            $global:PRTGUser
-            $global:PRTGPass
-            $global:PRTGSensorTree (created through cmdlet Invoke-PRTGSensorTreeRefresh)
+            $SCRIPT:PRTGServer
+            $SCRIPT:PRTGUser
+            $SCRIPT:PRTGPass
+            $SCRIPT:PRTGSensorTree (created through cmdlet Invoke-PRTGSensorTreeRefresh)
 
     .LINK
        https://github.com/AndiBellstedt/PoShPRTG
@@ -43,6 +43,7 @@
                    SupportsShouldProcess=$false, 
                    ConfirmImpact='Low')]
     [OutputType([XML])]
+
     Param(
         # Url for PRTG Server
         [Parameter(Mandatory=$true,
@@ -102,6 +103,7 @@
             Write-Log -LogText "No credential specified! Credential is needed..." -LogType Warning -LogScope $Local:logscope -Warning -NoFileStatus
             $Credential = Get-Credential -Message "Please specify logon cedentials for PRTG" -UserName $User
         }
+        #If a user entered domain credentials, strip off the domain
         if(($credential.UserName.Split('\')).count -gt 1) { 
             $User = $credential.UserName.Split('\')[1] 
         } else { 
@@ -124,12 +126,12 @@
         Remove-Variable pass -Force -ErrorAction Ignore -Verbose:$false -Debug:$false -WhatIf:$false
     }    
 
-    $global:PRTGServer = $Prefix + $server
-    $global:PRTGUser = $User
-    $global:PRTGPass = $Hash
+    $SCRIPT:PRTGServer = $Prefix + $server
+    $SCRIPT:PRTGUser = $User
+    $SCRIPT:PRTGPass = $Hash
     
-    Write-Log -LogText "Connection to PRTG ($($global:PRTGServer)) as user $($global:PRTGUser)" -LogType Info -LogScope $Local:logscope -NoFileStatus -Console
-    Invoke-PRTGSensorTreeRefresh -Server $global:PRTGServer -User $global:PRTGUser -Pass $global:PRTGPass -Verbose:$false
+    Write-Log -LogText "Connection to PRTG ($PRTGServer) as user $PRTGUser" -LogType Info -LogScope $Local:logscope -NoFileStatus -Console
+    Invoke-PRTGSensorTreeRefresh -Server $PRTGServer -User $PRTGUser -Pass $PRTGPass -Verbose:$false
     if($PassThru) {
         $Result = New-Object -TypeName psobject -Property @{
             Server = $Prefix + $server

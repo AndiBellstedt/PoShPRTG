@@ -34,38 +34,38 @@
 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [int]$TemplateSystem = (Get-PRTGObject -Name "Basic operatingsystem" -Recursive -Type device -SensorTree $global:PRTGSensorTree | Sort-Object Fullname | Select-Object fullname, objID | Out-GridView -Title "Please specify operatingsystem for new system" -OutputMode Single | Select-Object -ExpandProperty ObjID),
+            [int]$TemplateSystem = (Get-PRTGObject -Name "Basic operatingsystem" -Recursive -Type device -SensorTree $SCRIPT:PRTGSensorTree | Sort-Object Fullname | Select-Object fullname, objID | Out-GridView -Title "Please specify operatingsystem for new system" -OutputMode Single | Select-Object -ExpandProperty ObjID),
 
         [Parameter(Mandatory=$false)]
-            [int[]]$TemplateRole = (Get-PRTGObject -Name "Specific roles" -Recursive -Type device -SensorTree $global:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select roles for new system" -OutputMode Multiple | Select-Object -ExpandProperty ObjID),
+            [int[]]$TemplateRole = (Get-PRTGObject -Name "Specific roles" -Recursive -Type device -SensorTree $SCRIPT:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select roles for new system" -OutputMode Multiple | Select-Object -ExpandProperty ObjID),
 
         [Parameter(Mandatory=$false)]
             [string[]]$TemplateSensorFilter = "MUSS MANUELL*",
             
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [int]$Destination = (Get-PRTGObject -Type group -SensorTree $global:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select destination for new system" -OutputMode Single  | Select-Object -ExpandProperty ObjID),
+            [int]$Destination = (Get-PRTGObject -Type group -SensorTree $SCRIPT:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select destination for new system" -OutputMode Single  | Select-Object -ExpandProperty ObjID),
 
         # Url for PRTG Server 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({if( ($_.StartsWith("http")) ){$true}else{$false}})]
-            [String]$Server = $global:PRTGServer,
+            [String]$Server = $SCRIPT:PRTGServer,
 
         # User for PRTG Authentication
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [String]$User = $global:PRTGUser,
+            [String]$User = $SCRIPT:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [String]$Pass = $global:PRTGPass,
+            [String]$Pass = $SCRIPT:PRTGPass,
 
         # sensortree from PRTG Server 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [xml]$SensorTree = $global:PRTGSensorTree
+            [xml]$SensorTree = $SCRIPT:PRTGSensorTree
     )
     $Local:logscope = $MyInvocation.MyCommand.Name
     [array]$CopyObjectCollection = @()

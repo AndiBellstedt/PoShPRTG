@@ -28,33 +28,33 @@
         #ID of the group that contains the structure to be copied to the destination probe
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [int]$TemplateFolderStructureID = (Get-PRTGObject -Name "Groups for new customer" -Type group -SensorTree $global:PRTGSensorTree -Verbose:$false | Select-Object -ExpandProperty ObjID),
+            [int]$TemplateFolderStructureID = (Get-PRTGObject -Name "Groups for new customer" -Type group -SensorTree $SCRIPT:PRTGSensorTree -Verbose:$false | Select-Object -ExpandProperty ObjID),
         
         #ID of the destination probe
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [int]$ProbeID = (Get-PRTGProbe -SensorTree $global:PRTGSensorTree -Verbose:$false | Sort-Object fullname | Select-Object Name, objID | Out-GridView -Title "Please select destination probe" -OutputMode Single | Select-Object -ExpandProperty ObjID),
+            [int]$ProbeID = (Get-PRTGProbe -SensorTree $SCRIPT:PRTGSensorTree -Verbose:$false | Sort-Object fullname | Select-Object Name, objID | Out-GridView -Title "Please select destination probe" -OutputMode Single | Select-Object -ExpandProperty ObjID),
 
         # Url for PRTG Server 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({if( ($_.StartsWith("http")) ){$true}else{$false}})]
-            [String]$Server = $global:PRTGServer,
+            [String]$Server = $SCRIPT:PRTGServer,
 
         # User for PRTG Authentication
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [String]$User = $global:PRTGUser,
+            [String]$User = $SCRIPT:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [String]$Pass = $global:PRTGPass,
+            [String]$Pass = $SCRIPT:PRTGPass,
 
         # SensorTree from PRTG Server 
         [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [xml]$SensorTree = $global:PRTGSensorTree
+            [xml]$SensorTree = $SCRIPT:PRTGSensorTree
     )
     $logscope = $MyInvocation.MyCommand.Name
     
