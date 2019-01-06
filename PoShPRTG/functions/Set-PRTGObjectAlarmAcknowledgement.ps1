@@ -1,7 +1,7 @@
-﻿function Set-PRTGObjectAlamAcknowledgement {
+﻿function Set-PRTGObjectAlarmAcknowledgement {
     <#
     .Synopsis
-       Set-PRTGObjectAlamAcknowledgement
+       Set-PRTGObjectAlarmAcknowledgement
 
     .DESCRIPTION
        Acknowledge an alarm on a PRTG object 
@@ -13,18 +13,19 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Set-PRTGObjectAlamAcknowledgement -ObjectId 1
+       Set-PRTGObjectAlarmAcknowledgement -ObjectId 1
     
     .EXAMPLE
-       Set-PRTGObjectAlamAcknowledgement -ObjectId 1 -Message "Done by User01"
+       Set-PRTGObjectAlarmAcknowledgement -ObjectId 1 -Message "Done by User01"
     
     .EXAMPLE
-       Set-PRTGObjectAlamAcknowledgement -ObjectId 1 -Message "Done by User01" -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+       Set-PRTGObjectAlarmAcknowledgement -ObjectId 1 -Message "Done by User01" -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
     #>
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true, 
                    ConfirmImpact='medium')]
+    [Alias('Set-PRTGObjectAlamAcknowledgement')]
     Param(
         # ID of the object to resume
         [Parameter(Mandatory=$true,

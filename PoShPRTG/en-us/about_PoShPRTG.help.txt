@@ -1,0 +1,11 @@
+TOPIC
+	about_PoShPRTG
+	
+SHORT DESCRIPTION
+	Explains how to use the PoShPRTG powershell module
+	
+LONG DESCRIPTION
+	<Insert Content here>
+
+KEYWORDS
+	PoShPRTG

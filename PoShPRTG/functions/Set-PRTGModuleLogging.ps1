@@ -47,7 +47,7 @@
         # Logfile for Verbose messages
         [Parameter(Mandatory=$false)]
         [ValidateScript({Test-Path (Split-Path $_)})]
-            [String]$VerboseLogFile = "$($PWD.Path)PRTG_$(Get-Date -Format "yyyy-MM-dd")_Verbose.log",
+            [String]$VerboseLogFile = "$($PWD.Path)PRTG_$(Get-Date -Format 'yyyy-MM-dd')_Verbose.log",
 
         
         # Enables or disables logging of debug messages to $DebugLogFile
@@ -57,7 +57,7 @@
         # Logfile for debug messages
         [Parameter(Mandatory=$false)]
         [ValidateScript({Test-Path (Split-Path $_)})]
-            [String]$DebugLogFile = "$($PWD.Path)PRTG_$(Get-Date -Format "yyyy-MM-dd")_Verbose.log",
+            [String]$DebugLogFile = "$($PWD.Path)PRTG_$(Get-Date -Format 'yyyy-MM-dd')_Verbose.log"
     )
     Begin {
         $Local:logscope = $MyInvocation.MyCommand.Name

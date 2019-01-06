@@ -1,3 +1,27 @@
+
+# ignore the settings folder and files for VSCode and PSS
+.vscode/*
+*.psproj
+*TempPoint*
+
+# Ignore staging info from Visual Studio
+library/PoShPRTG/.vs/*
+library/PoShPRTG/PoShPRTG/bin/*
+library/PoShPRTG/PoShPRTG/obj/*
+
+# ignore PowerShell Studio MetaData
+PoShPRTG/PoShPRTG.psproj
+PoShPRTG/PoShPRTG.psproj.bak
+PoShPRTG/PoShPRTG.psprojs
+PoShPRTG/PoShPRTG.psproj
+
+# ignore the TestResults
+TestResults/*
+
+# ignore the publishing Directory
+publish/*
+
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
