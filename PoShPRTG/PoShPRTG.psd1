@@ -1,4 +1,4 @@
-@{
+﻿@{
     # Script module or binary module file associated with this manifest
     ModuleToProcess       = 'PoShPRTG.psm1'
 
@@ -20,11 +20,11 @@
     # Description of the functionality provided by this module
     Description           = @'
     PoShPRTG is a comprehensive module for administering PRTG NETWORK MONITOR (www.paessler.com/prtg).
-    
+
     It eases the rollout-/deployment process for new machines and managment of existing machines with all there sensors.
     The shipped cmdlets are used to call the PRTG API (http://prtg.paessler.com/api.htm?username=demo&password=demodemo)
-    
-    All cmdlets are build with 
+
+    All cmdlets are build with
     - powershell regular verbs
     - mostly with pipeling availabilties
     - comprehensive logging on verbose and debug channel

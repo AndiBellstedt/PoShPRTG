@@ -1,11 +1,19 @@
-TOPIC
-	about_PoShPRTG
-	
+﻿TOPIC
+    about_PoShPRTG
+
 SHORT DESCRIPTION
-	Explains how to use the PoShPRTG powershell module
-	
+    PoShPRTG is a comprehensive module for administering PRTG NETWORK MONITOR.
+
 LONG DESCRIPTION
-	<Insert Content here>
+    PoShPRTG is a comprehensive module for administering PRTG NETWORK MONITOR (www.paessler.com/prtg).
+
+    It eases the rollout-/deployment process for new machines and managment of existing machines with all there sensors.
+    The shipped cmdlets are used to call the PRTG API (http://prtg.paessler.com/api.htm?username=demo&password=demodemo)
+
+    All cmdlets are build with
+    - powershell regular verbs
+    - mostly with pipeling availabilties
+    - comprehensive logging on verbose and debug channel
 
 KEYWORDS
-	PoShPRTG
+    PoShPRTG

@@ -1,4 +1,4 @@
-<#PSScriptInfo
+﻿<#PSScriptInfo
 .VERSION 1.0.0.4
 .GUID 32a4f2d6-b021-4a38-8b6a-d76ceef2b02d
 .AUTHOR Jeffrey Snover
@@ -79,13 +79,11 @@ function Compare-ObjectProperty {
 
         if ($null -eq $inputObject) {
             return @{}
-        }
-        elseif ($inputObject -is [HashTable]) {
+        } elseif ($inputObject -is [HashTable]) {
             #We have to clone the hashtable because we are going to Remove Keys and if we don't
             #clone it, we'll modify the original object
             return $inputObject.clone()
-        }
-        else {
+        } else {
             $h = @{}
             foreach ($p in (Get-Member -InputObject $inputObject -MemberType Properties).Name) {
                 $h.$p = $inputObject.$p
@@ -102,21 +100,18 @@ function Compare-ObjectProperty {
         foreach ($p in $refH.keys |Where-Object {$_ -like $filter}) {
             if (! ($diffH.Contains($p)) -and !($ExcludeDifferent)) {
                 Write-Output (New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p)})
-            }
-            else {
+            } else {
                 #We convert these to strings and do a string comparison because there are all sorts of .NET
                 #objects whose comparison functions don't yeild the expected results.
                 if ($refH.$p -AND ($refH.$p |Get-Member -MemberType Method -Name CompareTo)) {
                     $Different = $refH.$p -ne $diffH.$p
-                }
-                else {
+                } else {
                     $Different = ("" + $refH.$p) -ne ("" + $diffH.$p)
                 }
                 if ($Different -and !($ExcludeDifferent)) {
                     Write-Output (New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p)})
                     Write-Output (New-Object PSObject -Property @{ SideIndicator = "=>"; Property = $p; Value = $($diffH.$p)})
-                }
-                elseif ($IncludeEqual) {
+                } elseif ($IncludeEqual) {
                     Write-Output (New-Object PSObject -Property @{ SideIndicator = "=="; Property = $p; Value = $($refH.$p)})
                 }
                 $diffH.Remove($p)

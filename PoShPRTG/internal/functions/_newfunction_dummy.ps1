@@ -1,4 +1,4 @@
-function Use-NewFunction {
+﻿function Use-NewFunction {
     <#
     .Synopsis
        %ToDo%
@@ -18,8 +18,8 @@ function Use-NewFunction {
     .EXAMPLE
        %ToDo% -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default', 
-        SupportsShouldProcess = $true, 
+    [CmdletBinding(DefaultParameterSetName = 'Default',
+        SupportsShouldProcess = $true,
         ConfirmImpact = 'Low')]
     Param(
         # Hilfebeschreibung zu Param1
@@ -32,34 +32,33 @@ function Use-NewFunction {
         [Alias('objID', 'ID')]
         $Param1,
 
-        # SensorTree from PRTG Server 
+        # SensorTree from PRTG Server
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $global:PRTGSensorTree,
+        [xml]$SensorTree = $script:PRTGSensorTree,
 
-        # Url for PRTG Server 
+        # Url for PRTG Server
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $global:PRTGServer,
+        [String]$Server = $script:PRTGServer,
 
         # User for PRTG Authentication
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $global:PRTGUser,
+        [String]$User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $global:PRTGPass
+        [String]$Pass = $script:PRTGPass
     )
     Begin {
-        $Local:logscope = $MyInvocation.MyCommand.Name
     }
-    
+
     Process {
         if ($pscmdlet.ShouldProcess("Target", "Operation")) {
-            Write-Log -LogText "Doing Use-Template..." -LogType Info -LogScope $Local:logscope -NoFileStatus -DebugOutput
+            Write-Log -LogText "Doing Use-Template..." -LogType Info -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
 
         }
     }
