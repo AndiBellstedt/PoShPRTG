@@ -1,5 +1,5 @@
-New-PSFLicense -Product 'PoShPRTG' -Manufacturer 'andre' -ProductVersion $script:ModuleVersion -ProductType Module -Name MIT -Version "1.0.0.0" -Date (Get-Date "2019-01-05") -Text @"
-Copyright (c) 2019 andre
+New-PSFLicense -Product 'PoShPRTG' -Manufacturer 'Andreas Bellstedt' -ProductVersion $script:ModuleVersion -ProductType Module -Name MIT -Version "1.0.0.0" -Date (Get-Date "2019-01-05") -Text @"
+Copyright (c) 2019 Andreas Bellstedt
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
