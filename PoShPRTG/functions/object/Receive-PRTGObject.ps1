@@ -23,47 +23,50 @@
     .EXAMPLE
        Receive-PRTGObject -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $false,
-        ConfirmImpact = 'low')]
+        ConfirmImpact = 'low'
+    )]
     Param(
-        [Parameter(Mandatory = $false)]
-        [int]$numResults = 99999,
+        [int]
+        $numResults = 99999,
 
-        [Parameter(Mandatory = $false)]
-        [string]$columns = "objid,type,name,tags,active,host",
+        [string]
+        $columns = "objid,type,name,tags,active,host",
 
-        [Parameter(Mandatory = $false)]
         [ValidateSet("sensortree", "groups", "sensors", "devices", "tickets", "messages", "values", "channels", "reports", "storedreports", "ticketdata")]
-        [string]$content = "devices",
+        [string]
+        $content = "devices",
 
-        [Parameter(Mandatory = $false)]
-        [string]$SortBy = "objid",
+        [string]
+        $SortBy = "objid",
 
-        [Parameter(Mandatory = $false)]
         [ValidateSet("Desc", "Asc")]
-        [string]$SortDirection = "Desc",
+        [string]
+        $SortDirection = "Desc",
 
-        [Parameter(Mandatory = $false)]
-        [hashtable]$Filters,
+        [hashtable]
+        $Filters,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ($_.StartsWith("http")) { $true } else { $false } } )]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass
+        [String]
+        $Pass = $script:PRTGPass
     )
-    $SortDirectionPRTGStyle = if ($SortDirection -eq "Desc") {"-"}else {''}
+
+    $SortDirectionPRTGStyle = if ($SortDirection -eq "Desc") { "-" }else { '' }
     $body = @{
         content  = $content;
         count    = $numResults;
@@ -85,5 +88,6 @@
         Write-Log -LogText "Failed to get PRTG Device tree $($_.exception.message)" -LogType Error -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -Error
         return
     }
-    return $prtgDeviceTree
+
+    $prtgDeviceTree
 }

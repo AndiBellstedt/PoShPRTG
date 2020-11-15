@@ -16,63 +16,62 @@
        Remove-PRTGObjectTAG -ObjectId 1 -TAGName "NewName" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'medium')]
+        ConfirmImpact = 'medium'
+    )]
     Param(
         # ID of the object to pause/resume
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 } )]
         [Alias('ObjID', 'ID')]
-        [int]$ObjectId,
+        [int]
+        $ObjectId,
 
         # Name of the object's property to set
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $false,
-            Position = 1)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $false)]
         [ValidateNotNullOrEmpty()]
-        [string[]]$TAGName,
+        [string[]]
+        $TAGName,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ($_.StartsWith("http")) { $true } else { $false } } )]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree,
+        [xml]
+        $SensorTree = $script:PRTGSensorTree,
 
-        # skip errors if an tag is not present
-        [Parameter(Mandatory = $false)]
-        [Switch]$Force,
+        # Skip errors if an tag is not present
+        [Switch]
+        $Force,
 
-        # returns the changed object
-        [Parameter(Mandatory = $false)]
-        [Switch]$PassThru
+        # Output the deleted object
+        [Switch]
+        $PassThru
     )
-    Begin {
-    }
+
+    Begin {}
 
     Process {
         foreach ($ID in $ObjectId) {
             $break = $false
+
             #Get the object
             Write-Log -LogText "Gather object tags from object ID $ID." -LogType Query -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
             try {
@@ -86,6 +85,7 @@
             $TAGListExisting = $Object.tags.Split(' ')
             $TAGListToSet = $Object.tags
             $TAGListCount = 0
+
             foreach ($TAG in $TAGName) {
                 if ($TAG -in $TAGListExisting) {
                     $TAGListToSet = $TAGListToSet -replace [regex]::Escape($TAG), ''
@@ -100,6 +100,7 @@
                     }
                 }
             }
+
             $TAGListToSet = $TAGListToSet.Trim()
             if ($break) { break }
 
@@ -123,13 +124,12 @@
             }
 
             #output the object
-            if ($PassThru) { Write-Output $Object }
+            if ($PassThru) { $Object }
 
             #clear up the variable mess
-            Remove-Variable TAG, TAGListExisting, TAGListToSet, Object, MessageText -Force -ErrorAction Ignore -Verbose:$false -Debug:$false -WhatIf:$false
+            Remove-Variable TAG, TAGListExisting, TAGListToSet, Object, MessageText -Force -ErrorAction Ignore -Confirm:$false -Verbose:$false -Debug:$false -WhatIf:$false
         }
     }
 
-    End {
-    }
+    End {}
 }

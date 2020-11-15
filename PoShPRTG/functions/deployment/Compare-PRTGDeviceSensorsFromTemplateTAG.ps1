@@ -26,41 +26,41 @@
        Compare-PRTGDeviceSensorsFromTemplateTAG -TemplateBaseID (Get-PRTGProbe -Name "MyTemplateProbe").ObjID -IncludeEqual
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $false,
-        ConfirmImpact = 'Low')]
+        ConfirmImpact = 'Low'
+    )]
     Param(
         # ID of the object to copy
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 })]
         [Alias('objID', 'ID', 'ObjectId')]
-        [int]$DeviceID,
+        [int]
+        $DeviceID,
 
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [int]$TemplateBaseID = 1,
+        [int]
+        $TemplateBaseID = 1,
 
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$TemplateTAGNameIdentifier = "Template_",
+        [String]
+        $TemplateTAGNameIdentifier = "Template_",
 
-        [Parameter(Mandatory = $false)]
-        [switch]$ComparePropertiesInObject,
+        [switch]
+        $ComparePropertiesInObject,
 
-        [Parameter(Mandatory = $false)]
-        [switch]$IncludeEqual,
+        [switch]
+        $IncludeEqual,
 
         # SensorTree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
-    Begin {
-    }
+
+    Begin {}
 
     Process {
         Write-Log -LogText "Getting device to validate with object ID $($DeviceID)" -LogType Query -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
@@ -102,20 +102,21 @@
                         $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force -Name SideIndicatorStatus `
                                 -Value (. {
                                     switch ($_.SideIndicator) {
-                                        '<=' {"WARNING"}
-                                        '=>' {"WARNING"}
-                                        '==!' {"WARNING"}
-                                        '==' {"OK"}
+                                        '<=' { "WARNING" }
+                                        '=>' { "WARNING" }
+                                        '==!' { "WARNING" }
+                                        '==' { "OK" }
                                     }
                                 })
                         }
+
                         $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force -Name "SideIndicatorDescription" `
                                 -Value (. {
                                     switch ($_.SideIndicator) {
-                                        '<=' {"In device but not in template"}
-                                        '=>' {"In template but not in device"}
-                                        '==!' {"Match in device and template, but difference in Properties! Look at PropertyDifferenceReport"}
-                                        '==' {"Match in device and template"}
+                                        '<=' { "In device but not in template" }
+                                        '=>' { "In template but not in device" }
+                                        '==!' { "Match in device and template, but difference in Properties! Look at PropertyDifferenceReport" }
+                                        '==' { "Match in device and template" }
                                     }
                                 })
                         }
@@ -126,19 +127,19 @@
                             $ResultItem = $Difference
                             $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicator"            -Value "=>" }
                             $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorStatus"      -Value "WARNING" }
-                            $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorDescription" -Value "In template but not in device"}
+                            $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorDescription" -Value "In template but not in device" }
                         } elseif ($Reference -and -not $Difference) {
                             #no sensors in template but some sensors in device
                             $ResultItem = $Reference
                             $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicator"            -Value "<=" }
                             $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorStatus"      -Value "WARNING" }
-                            $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorDescription" -Value "In device but not in template"}
+                            $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorDescription" -Value "In device but not in template" }
                         } elseif (-not $Reference -and -not $Difference) {
                             #no sensors in device and no sensors in template
                             $ResultItem = ""
                             $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicator"            -Value "!!" }
                             $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorStatus"      -Value "WARNING" }
-                            $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorDescription" -Value "No objects found"}
+                            $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorDescription" -Value "No objects found" }
                         }
                     }
                 } else {
@@ -146,7 +147,7 @@
                     $ResultItem = $DeviceTAGSummaryItem.Sensor
                     $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicator"            -Value "!!" }
                     $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorStatus"      -Value "WARNING" }
-                    $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorDescription" -Value "Object not matching any template"}
+                    $ResultItem | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Force  -Name "SideIndicatorDescription" -Value "Object not matching any template" }
                 }
 
                 $ResultItem | ForEach-Object { if ($_.pstypenames[0] -ne "PRTG.Object.Compare") { $_.pstypenames.Insert(0, "PRTG.Object.Compare") } }
@@ -161,4 +162,6 @@
             Write-Output $result
         }
     }
+
+    End {}
 }

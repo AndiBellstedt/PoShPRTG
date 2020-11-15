@@ -19,28 +19,23 @@
        Get-PRTGSensorTree -Server "https://prtg.corp.customer.com" -User "prtgadmin" -Pass "1111111"
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
-        SupportsShouldProcess = $false,
-        ConfirmImpact = 'Low')]
+    [CmdletBinding(DefaultParameterSetName = 'Default', SupportsShouldProcess = $false, ConfirmImpact = 'Low')]
     Param(
         # Url for PRTG Server
-        [Parameter(Mandatory = $false,
-            Position = 0)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript({ if ( ($_.StartsWith("http")) ) { $true } else { $false } })]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false,
-            Position = 1)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false,
-            Position = 2)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass
+        [String]
+        $Pass = $script:PRTGPass
     )
     $body = @{
         username = $User

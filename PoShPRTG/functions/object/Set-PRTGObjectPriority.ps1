@@ -21,64 +21,64 @@
        Set-PRTGObjectPriority -ObjectId 1 -Priority 3 -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'medium')]
+        ConfirmImpact = 'medium'
+    )]
     Param(
         # ID of the object to resume
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 } )]
         [Alias('ObjID', 'ID')]
-        [int[]]$ObjectId,
+        [int[]]
+        $ObjectId,
 
         # Priority value to set
-        [Parameter(Mandatory = $true,
-            Position = 1)]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidatePattern("[1-5]")]
-        [int]$Priority,
+        [int]
+        $Priority,
 
         # returns the changed object
-        [Parameter(Mandatory = $false)]
-        [Switch]$PassThru,
+        [Switch]
+        $PassThru,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ($_.StartsWith("http")) { $true } else { $false } } )]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
-    Begin {
-        $body = @{
-            id       = 0
-            prio     = $Priority
-            username = $User
-            passhash = $Pass
-        }
-    }
+
+    Begin {}
 
     Process {
         foreach ($id in $ObjectId) {
-            $body.id = $id
+            $body = @{
+                id       = $id
+                prio     = $Priority
+                username = $User
+                passhash = $Pass
+            }
+
             if ($pscmdlet.ShouldProcess("objID $Id", "Set priority $Priority to object")) {
                 #Set in PRTG
                 try {
@@ -92,14 +92,10 @@
                 $SensorTree.SelectSingleNode("/prtg/sensortree/nodes/group//*[id=$($ID)]/priority").InnerText = $Priority
 
                 #Write-Output
-                if ($PassThru) {
-                    write-output (Get-PRTGObject -ObjectID $id -SensorTree $SensorTree -Verbose:$false)
-                }
+                if ($PassThru) { Get-PRTGObject -ObjectID $id -SensorTree $SensorTree -Verbose:$false }
             }
         }
     }
 
-    End {
-
-    }
+    End {}
 }

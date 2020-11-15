@@ -23,57 +23,57 @@
        Disable-PRTGObject -ObjectId 1 -Message "Done by User01" -Minutes 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'medium')]
+        ConfirmImpact = 'medium'
+    )]
     Param(
         # ID of the object to pause
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 })]
         [Alias('ObjID')]
-        [int[]]$ObjectId,
+        [int[]]
+        $ObjectId,
 
         # Message to associate with the pause event
-        [Parameter(Mandatory = $false)]
         [string]$Message,
 
         # Length of time in minutes to pause the object, $null for indefinite
-        [Parameter(Mandatory = $false)]
-        [int]$Minutes = $null,
+        [int]
+        $Minutes = $null,
 
         # do action regardless of current status of sensor
-        [Parameter(Mandatory = $false)]
-        [Switch]$Force,
+        [Switch]
+        $Force,
 
         # Not waiting for sensor status update in PRTG server (faster reply on large batch jobs)
-        [Parameter(Mandatory = $false)]
-        [Switch]$NoWaitOnStatus,
+        [Switch]
+        $NoWaitOnStatus,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if (($_.StartsWith("http"))) { $true } else { $false } })]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
-        # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
+        # Sensortree from PRTG Server
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
+
     Begin {
         $body = @{
             id       = 0
@@ -81,6 +81,7 @@
             username = $User
             passhash = $Pass
         }
+
         if ($Minutes) { $body.Add("duration", $Minutes) }
         if ($Message) { $body.Add("pausemsg", $Message) }
     }
@@ -129,6 +130,5 @@
         }
     }
 
-    End {
-    }
+    End {}
 }

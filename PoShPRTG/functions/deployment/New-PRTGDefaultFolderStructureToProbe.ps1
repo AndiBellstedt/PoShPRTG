@@ -21,41 +21,44 @@
        New-PRTGDefaultFolderStructureToProbe -TemplateFolderStructureID (Get-PRTGObject -Name "Template_group_name") -ProbeID (Get-PRTGProbes | Out-GridView -Title "Please select destination probe" -OutputMode Single)
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'Medium')]
+        ConfirmImpact = 'Medium'
+    )]
     Param(
         #ID of the group that contains the structure to be copied to the destination probe
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [int]$TemplateFolderStructureID = (Get-PRTGObject -Name "Groups for new customer" -Type group -SensorTree $script:PRTGSensorTree -Verbose:$false | Select-Object -ExpandProperty ObjID),
+        [int]
+        $TemplateFolderStructureID = (Get-PRTGObject -Name "Groups for new customer" -Type group -SensorTree $script:PRTGSensorTree -Verbose:$false | Select-Object -ExpandProperty ObjID),
 
         #ID of the destination probe
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [int]$ProbeID = (Get-PRTGProbe -SensorTree $script:PRTGSensorTree -Verbose:$false | Sort-Object fullname | Select-Object Name, objID | Out-GridView -Title "Please select destination probe" -OutputMode Single | Select-Object -ExpandProperty ObjID),
+        [int]
+        $ProbeID = (Get-PRTGProbe -SensorTree $script:PRTGSensorTree -Verbose:$false | Sort-Object fullname | Select-Object Name, objID | Out-GridView -Title "Please select destination probe" -OutputMode Single | Select-Object -ExpandProperty ObjID),
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ( ($_.StartsWith("http")) ) { $true }else { $false } })]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
         # SensorTree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
+
     $logscope = $MyInvocation.MyCommand.Name
 
     #Get tempalte to copy

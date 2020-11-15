@@ -25,36 +25,37 @@
        Receive-PRTGObjectStatus -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $false,
-        ConfirmImpact = 'low')]
+        ConfirmImpact = 'low'
+    )]
     [OutputType([PSCustomObject])]
     Param(
         # ID of the object to pause/resume
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Alias('ID')]
-        [ValidateScript( {$_ -gt 0})]
-        [int[]]$ObjectID,
+        [ValidateScript( { $_ -gt 0 })]
+        [int[]]
+        $ObjectID,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ($_.StartsWith("http")) { $true } else { $false } } )]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass
+        [String]
+        $Pass = $script:PRTGPass
     )
+
     Begin {
         $StatusMapping = @{
             1  = "Unknown"
@@ -80,13 +81,17 @@
                 Write-Log -LogText "Unable to get object status from prtg. ($Server) Message:$($_.exception.message)" -LogType Error -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -Error
                 return
             }
+
             $hash = @{
                 'objid'      = $ID
                 "status"     = $StatusMapping[[int]$statusID]
                 "status_raw" = $statusID
             }
+
             $result = New-Object -TypeName PSCustomObject -Property $hash
-            return $result
+            $result
         }
     }
+
+    end {}
 }

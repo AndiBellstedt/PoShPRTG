@@ -23,41 +23,45 @@
        Rename-PRTGObject -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'medium')]
+        ConfirmImpact = 'medium'
+    )]
     Param(
         # ID of the object to pause/resume
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
-        [int]$ObjectId,
+        [ValidateScript( { $_ -gt 0 } )]
+        [int]
+        $ObjectId,
 
         # Message to associate with the pause event
-        [Parameter(Mandatory = $false)]
-        [string]$NewName,
+        [string]
+        $NewName,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ($_.StartsWith("http")) { $true } else { $false } } )]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
         # SensorTree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
+
     $body = @{
         id       = $ObjectId
         value    = $NewName
@@ -74,7 +78,7 @@
     }
 
     if ($pscmdlet.ShouldProcess("objID $ObjectId", "Rename PRTG object to '$NewName'")) {
-        #Set in PRTG
+        # Set in PRTG
         try {
             Write-Log -LogText "Set new name ""$($NewName)"" on object ID $ObjectId. ($Server)" -LogType Set -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
             $null = Invoke-WebRequest -UseBasicParsing -Uri "$Server/api/rename.htm" -Method Get -Body $body -Verbose:$false
@@ -83,13 +87,10 @@
             return
         }
 
-        #Set in object to return
-        #$object.Name = $NewName
-
-        #Set on SensorTree variable
+        # Set on SensorTree variable
         $SensorTree.SelectSingleNode("/prtg/sensortree/nodes/group//*[id=$($ObjectId)]/name").InnerText = $object.Name
 
-        #Write output
-        return (Get-PRTGObject -ID $ObjectId -SensorTree $SensorTree -Verbose:$false -ErrorAction Stop)
+        # Write output
+        Get-PRTGObject -ID $ObjectId -SensorTree $SensorTree -Verbose:$false -ErrorAction Stop
     }
 }

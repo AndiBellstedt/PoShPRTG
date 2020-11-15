@@ -22,59 +22,57 @@
        Add-PRTGObjectTAG -ObjectId 1 -TAGName "NewName" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111" -SensorTree $PRTGSensorTree -PassThru
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'medium')]
+        ConfirmImpact = 'medium'
+    )]
     Param(
         # ID of the object to pause/resume
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 })]
         [Alias('ObjID', 'ID')]
-        [int]$ObjectId,
+        [int]
+        $ObjectId,
 
         # Name of the object's property to set
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $false,
-            Position = 1)]
+        [Parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $false)]
         [ValidateNotNullOrEmpty()]
-        [string[]]$TAGName,
+        [string[]]
+        $TAGName,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ( ($_.StartsWith("http")) ) { $true } else { $false } })]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree,
+        [xml]
+        $SensorTree = $script:PRTGSensorTree,
 
         # skip errors if an tag is not present
-        [Parameter(Mandatory = $false)]
-        [Switch]$Force,
+        [Switch]
+        $Force,
 
         # returns the changed object
-        [Parameter(Mandatory = $false)]
-        [Switch]$PassThru
+        [Switch]
+        $PassThru
     )
-    Begin {
-    }
+
+    Begin {}
 
     Process {
         foreach ($ID in $ObjectId) {
@@ -149,6 +147,5 @@
         }
     }
 
-    End {
-    }
+    End {}
 }

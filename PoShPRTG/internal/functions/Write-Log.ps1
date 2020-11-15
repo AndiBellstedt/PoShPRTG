@@ -85,7 +85,11 @@
                 + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
                 + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,Write-Log
     #>
-    [CmdletBinding(DefaultParameterSetName = 'VerboseOutput', ConfirmImpact = "Low")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "Used with intension")]
+    [CmdletBinding(
+        DefaultParameterSetName = 'VerboseOutput',
+        ConfirmImpact = "Low"
+    )]
     [Alias('Log')]
     Param(
         #The message to be logged
@@ -146,7 +150,8 @@
             ParameterSetName = 'ConsoleOutput' )]
         [switch]$Warning
     )
-    Begin {
+
+    begin {
         switch ($LogType) {
             'Warning' { $Type = '[WARNING] ' }
             'Info' { $Type = '[INFO   ] ' }
@@ -155,31 +160,48 @@
             'Error' { $Type = '[ERROR  ] ' }
             Default { $Type = '[INFO   ] ' }
         }
+
         if ($logScope) { $LogScope = "[$($LogScope.ToUpper())] " }
         if ($NoFileStatus) { $status = '' } else { $status = "[NOFILE] " }
         if ($NoTimeStamp) { $logDate = '' } else { $logDate = "[$(Get-Date -Format "yyyy-MM-dd HH:mm:ss")] " }
+
         #turn of confimation for debug actions
         If (($DebugPreference -eq 'Inquire') -and ($PsCmdlet.ParameterSetName -eq 'DebugOutput')) {
             $DebugPreferenceOrg = $DebugPreference
             $DebugPreference = 'Continue'
         }
     }
-    Process {
+
+    process {
         if ($LogFile) {
             foreach ($File in $LogFile) {
-                Write-Output "$($logDate)$($Type)$($LogScope)$($LogText)" | Out-File -FilePath $File -Append
+                "$($logDate)$($Type)$($LogScope)$($LogText)" | Out-File -FilePath $File -Append
             }
         }
 
         $message = "$($logDate)$($status)$($Type)$($LogScope)$($LogText)"
         switch ($PsCmdlet.ParameterSetName) {
-            'VerboseOutput' { if ($Warning) { write-warning $message            } else { write-verbose $message } }
-            'DebugOutput' { if ($Warning) { Write-Debug   "WARNING: $message" } else { Write-Debug   $message } }
-            'ConsoleOutput' { if ($Warning) { Write-Host    "WARNING: $message" -ForegroundColor $Host.PrivateData.WarningForegroundColor -BackgroundColor $Host.PrivateData.WarningBackgroundColor }else { Write-Host $message } }
+            'VerboseOutput' {
+                if ($Warning) { Write-Warning $message } else { write-verbose $message }
+            }
+
+            'DebugOutput' {
+                if ($Warning) { Write-Debug "WARNING: $message" } else { Write-Debug $message }
+            }
+
+            'ConsoleOutput' {
+                if ($Warning) {
+                    Write-Host "WARNING: $message" -ForegroundColor $Host.PrivateData.WarningForegroundColor -BackgroundColor $Host.PrivateData.WarningBackgroundColor
+                } else {
+                    Write-Host $message
+                }
+            }
+
             'ErrorOutput' { Write-error $message }
         }
     }
-    End {
+
+    end {
         $DebugPreference = $DebugPreferenceOrg
         Remove-Variable message, logDate, status, Type, DebugPreferenceOrg -Force -ErrorAction Ignore -WhatIf:$false -Confirm:$false -Verbose:$false -Debug:$false
     }

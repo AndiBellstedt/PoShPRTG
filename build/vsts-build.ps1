@@ -62,7 +62,7 @@ if (-not $WorkingDirectory) {
 if (-not $WorkingDirectory) { $WorkingDirectory = Split-Path $PSScriptRoot }
 
 # Check module path
-if(-not (Test-Path -Path "$($WorkingDirectory)\$($ModuleName)")) {
+if (-not (Test-Path -Path "$($WorkingDirectory)\$($ModuleName)")) {
     Stop-PSFFunction -Message "Unable to find module $($ModuleName). Maybe wrong module name specified" -EnableException $true
 }
 
@@ -120,13 +120,13 @@ if ($AutoVersion) {
 
     $remoteModule = Find-Module '$($ModuleName)' -Repository $Repository -ErrorAction SilentlyContinue
     [version]$remoteVersion = $remoteModule.Version
-    if(-not $remoteVersion) { [version]$remoteVersion = [version]::new(0, 0, 0, 0) }
+    if (-not $remoteVersion) { [version]$remoteVersion = [version]::new(0, 0, 0, 0) }
 
     [version]$localVersion = (Import-PowerShellDataFile -Path "$($publishDir.FullName)\$($ModuleName)\$($ModuleName).psd1").ModuleVersion
 
-    if($remoteVersion -eq $localVersion) {
+    if ($remoteVersion -eq $localVersion) {
         [version]$newVersion = [version]::new($localVersion.Major, $localVersion.Minor, $remoteVersion.Build + 1, 0)
-    } elseif($remoteVersion -gt $localVersion) {
+    } elseif ($remoteVersion -gt $localVersion) {
         [version]$newVersion = [version]::new($remoteVersion.Major, $remoteVersion.Minor, $remoteVersion.Build + 1, 0)
     } else {
         [version]$newVersion = $localVersion

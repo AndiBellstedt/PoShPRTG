@@ -42,33 +42,29 @@
        # Piping is also possible
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'ReturnAll',
+    [CmdletBinding(
+        DefaultParameterSetName = 'ReturnAll',
         SupportsShouldProcess = $false,
-        ConfirmImpact = 'Low')]
+        ConfirmImpact = 'Low'
+    )]
     Param(
-        [Parameter(Mandatory = $true,
-            ParameterSetName = 'ID',
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'ID', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {$_ -gt 0})]
         [Alias('ObjID', 'ID')]
-        [int[]]$ObjectId,
+        [int[]]
+        $ObjectId,
 
-        [Parameter(Mandatory = $true,
-            ParameterSetName = 'Name',
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
-        [String[]]$Name,
+        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'Name', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [String[]]
+        $Name,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
-
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
+
     Begin {
         $result = @()
     }

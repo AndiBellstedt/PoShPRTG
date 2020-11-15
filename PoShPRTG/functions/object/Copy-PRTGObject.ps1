@@ -2,6 +2,7 @@
     <#
     .Synopsis
        Copy-PRTGObject
+
     .DESCRIPTION
        Copy a PRTG Object
 
@@ -22,51 +23,50 @@
        Copy-PRTGObject -ObjectId 1 -TargetID 2 -Name "NewName" -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'Medium')]
+        ConfirmImpact = 'Medium'
+    )]
     Param(
         # ID of the object to copy
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 })]
         [Alias('SourceID', 'objID')]
-        [int]$ObjectID,
+        [int]
+        $ObjectID,
 
         # ID of the target parent object
-        [Parameter(Mandatory = $true,
-            Position = 1)]
+        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [int]$TargetID,
+        [int]
+        $TargetID,
 
         # Name of the newly cloned object
-        [Parameter(Mandatory = $false,
-            Position = 2)]
-        [string]$Name,
+        [string]
+        $Name,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript({ if (($_.StartsWith("http"))) { $true } else { $false } })]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
         # Sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
 
     $body = @{
@@ -108,7 +108,7 @@
         # Pluralise the type. Needed for receiving the copied object by "type"
         $TypePlural = $SourceObject.Type + 's'
         # Fetch the ID of the object we just added
-        [array]$result = (Receive-PRTGObject -numResults 100 -columns "objid,name,type,tags,active,status" -SortBy "objid" -content $TypePlural -Filters @{"filter_name" = $Name} -Server $Server -User $User -Pass $Pass -Verbose:$false).$TypePlural.item | Where-Object objid -ne $ObjectId
+        [array]$result = (Receive-PRTGObject -numResults 100 -columns "objid,name,type,tags,active,status" -SortBy "objid" -content $TypePlural -Filters @{"filter_name" = $Name } -Server $Server -User $User -Pass $Pass -Verbose:$false).$TypePlural.item | Where-Object objid -ne $ObjectId
 
         #output the object if result contains an objectID
         if ($result.ObjID) {

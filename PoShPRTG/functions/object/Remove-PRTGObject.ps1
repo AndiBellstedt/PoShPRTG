@@ -30,59 +30,59 @@
        Receive-PRTGObject 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'high')]
+        ConfirmImpact = 'high'
+    )]
     [OutputType([Boolean])]
     Param(
         # ID of the object to delete
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Alias('objID', 'ID')]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
-        [int[]]$ObjectID,
+        [ValidateScript( { $_ -gt 0 } )]
+        [int[]]
+        $ObjectID,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ($_.StartsWith("http")) { $true } else { $false } } )]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree,
+        [xml]
+        $SensorTree = $script:PRTGSensorTree,
 
         # returns the deleted object
-        [Parameter(Mandatory = $false)]
-        [Switch]$PassThru
+        [Switch]
+        $PassThru
     )
-    Begin {
-        $body = @{
-            id       = 0
-            approve  = 1
-            username = $User
-            passhash = $Pass
-        }
-    }
+
+    Begin {}
 
     Process {
         $Deleted = @()
+
         foreach ($ID in $ObjectID) {
-            $body.id = $ID
+            $body = @{
+                id       = $ID
+                approve  = 1
+                username = $User
+                passhash = $Pass
+            }
 
             # Check for object on sensor tree
             try {
@@ -116,11 +116,10 @@
                 }
 
                 #Write-Uutput
-                if ($PassThru) { Write-Output (Set-TypesNamesToPRTGObject -PRTGObject $Deleted) }
+                if ($PassThru) { Set-TypesNamesToPRTGObject -PRTGObject $Deleted }
             }
         }
     }
 
-    End {
-    }
+    End {}
 }

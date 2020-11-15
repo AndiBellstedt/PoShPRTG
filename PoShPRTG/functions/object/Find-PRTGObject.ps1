@@ -27,37 +27,40 @@
        Find-PRTGObject -BySensorType POP3, DNS
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $false,
-        ConfirmImpact = 'Low')]
+        ConfirmImpact = 'Low'
+    )]
     Param(
-        [Parameter(Mandatory = $true,
-            ParameterSetName = 'ByTAGName')]
-        [string[]]$ByTAGName,
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByTAGName')]
+        [string[]]
+        $ByTAGName,
 
-        [Parameter(Mandatory = $false,
-            ParameterSetName = 'ByTAGName')]
-        [switch]$CaseSensitive,
+        [Parameter(ParameterSetName = 'ByTAGName')]
+        [switch]
+        $CaseSensitive,
 
-        [Parameter(Mandatory = $false,
-            ParameterSetName = 'ByTAGName')]
-        [switch]$IncludeInherited,
+        [Parameter(ParameterSetName = 'ByTAGName')]
+        [switch]
+        $IncludeInherited,
 
-        [Parameter(Mandatory = $true,
-            ParameterSetName = 'ByStatus')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByStatus')]
         [ValidateSet("Unknown", "Scanning", "Up", "Warning", "Down", "No Probe", "Paused by User", "Paused by Dependency", "Paused by Schedule", "Unusual", "Not Licensed", "Paused Until")]
-        [string[]]$ByStatus,
+        [string[]]
+        $ByStatus,
 
-        [Parameter(Mandatory = $true,
-            ParameterSetName = 'BySensorType')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'BySensorType')]
         [ValidateSet('Cloud HTTP', 'Cloud Ping', 'Serverzustand', 'DNS', 'VMWare Hostserver Hardware-Zustand (SOAP)', 'VMware Hostserver Leistung (SOAP)', 'Exchange Sicherung (Powershell)', 'Exchange Datenbank (Powershell)', 'Exchange Datenbank DAG (Powershell)', 'Exchange Postfach (Powershell)', 'Exchange Nachrichtenwarteschlange (Powershell)', 'Programm/Skript', 'Programm/Skript (Erweitert)', 'Datei-Inhalt', 'Ordner', 'FTP', 'Green IT', 'HTTP', 'HTTP (Erweitert)', 'Hyper-V Freigegebenes Clustervolume', 'IMAP', 'Windows Updates Status (Powershell)', 'Leistungsindikator IIS Anwendungspool', 'Ping', 'POP3', 'Port', 'Zustand der Probe', 'Active Directory Replikationsfehler', 'Windows Druckwarteschlange', 'WSUS-Statistiken', 'RDP (Remote Desktop)', 'Freigaben-Speicherplatz', 'SMTP', 'SNMP Prozessorlast', 'SNMP (Benutzerdef.)', 'SNMP-Zeichenfolge', 'SNMP Dell EqualLogic Physikalischer Datenträger', 'SNMP Dell PowerEdge Physikalischer Datenträger', 'SNMP SonicWALL Systemzustand', 'SNMP Dell PowerEdge Systemzustand', 'SNMP Plattenplatz', 'SNMP-Bibliothek', 'SNMP Linux Durchschnittl. Last', 'SNMP Linux Speicherinfo', 'SNMP Linux Physikalischer Datenträger', 'SNMP Speicher', 'SNMP QNAP Logischer Datenträger', 'SNMP QNAP Physikalischer Datenträger', 'SNMP QNAP Systemzustand', 'SNMP RMON', 'SNMP-Datenverkehr', 'SNMP-Laufzeit', 'SNTP', 'SSL-Sicherheitsüberprüfung', 'SSL-Zertifikatssensor', 'Systemzustand', 'SNMP-Trap-Empfänger', 'VMware Virtual Machine (SOAP)', 'VMware Datastore (SOAP)', 'Ereignisprotokoll (Windows API)', 'WMI Sicherheits-Center', 'WMI Laufwerkskapazität (mehrf.)', 'WMI Ereignisprotokoll', 'WMI Exchange Transportwarteschlange', 'Hyper-V Virtuelle Maschine', 'Hyper-V Host Server', 'Hyper-V Virtuelles Speichergerät', 'Windows IIS-Anwendung', 'WMI Logischer Datenträger E/A BETA', 'WMI Arbeitsspeicher', 'WMI Netzwerkadapter', 'WMI Auslagerungsdatei', 'Windows Physikalischer Datenträger E/A BETA', 'Windows Prozess', 'Windows Prozessorlast', 'WMI Dienst', 'WMI Freigabe', 'WMI Microsoft SQL Server 2012', 'WMI Terminaldienste (Windows 2008+)', 'Windows Systemlaufzeit', 'WMI UTC-Zeit', 'WMI Wichtige Systemdaten (v2)', 'WMI Datenträger')]
-        [String[]]$BySensorType,
+        [String[]]
+        $BySensorType,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
+
     Begin {
         $StatusMapping = @{
             "Unknown"              = 1
@@ -219,6 +222,5 @@
         }
     }
 
-    End {
-    }
+    End {}
 }

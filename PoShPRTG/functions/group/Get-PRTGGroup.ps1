@@ -41,32 +41,29 @@
        1 | Get-PRTGGroup
        # Piping is also possible
     #>
-    [CmdletBinding(DefaultParameterSetName='ReturnAll',
-                   SupportsShouldProcess=$false,
-                   ConfirmImpact='Low')]
+    [CmdletBinding(
+        DefaultParameterSetName = 'ReturnAll',
+        SupportsShouldProcess = $false,
+        ConfirmImpact = 'Low'
+    )]
     Param(
-        [Parameter(Mandatory=$true,
-                   ParameterSetName='ID',
-                   ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
+        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'ID', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript({$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 })]
         [Alias('ObjID', 'ID')]
-            [int[]]$ObjectId,
+        [int[]]
+        $ObjectId,
 
-        [Parameter(Mandatory=$true,
-                   ParameterSetName='Name',
-                   ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
-            [String[]]$Name,
+        [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'Name', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [String[]]
+        $Name,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory=$false)]
         [ValidateNotNullOrEmpty()]
-            [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
+
     Begin {
         $result = @()
     }
@@ -74,7 +71,7 @@
     Process {
         switch ($PsCmdlet.ParameterSetName) {
             'ID' {
-                foreach($item in $ObjectId) {
+                foreach ($item in $ObjectId) {
                     New-Variable -Name result -Force
                     $result += Get-PRTGObject -ObjectID $item -Type group -SensorTree $SensorTree -Verbose:$false
                     Write-Output $result
@@ -82,7 +79,7 @@
             }
 
             'Name' {
-                foreach($item in $Name) {
+                foreach ($item in $Name) {
                     New-Variable -Name result -Force
                     $result += Get-PRTGObject -Name     $item -Type group -SensorTree $SensorTree -Verbose:$false
                     Write-Output $result

@@ -17,45 +17,45 @@ function Compare-ObjectProperty {
     <#
 
     .DESCRIPTION
-    Determine the difference in properties between two objects.
+        Determine the difference in properties between two objects.
 
-    NOTE - if a property's type does not have a CompareTo() function, the property is converted to a
-    string for the comparison
-
-    .EXAMPLE
-    $o1= @{a1=1;a2=2;b1=3;b2=4}
-    PS C:\> $o2= @{a1=1;a2=2;b1=3;b2=5}
-    PS C:\> Compare-ObjectProperty $o1 $o2
-
-    Property Value SideIndicator
-    -------- ----- -------------
-    b2           4 <=
-    b2           5 =>
-    .EXAMPLE
-    $o1= @{a1=1;a2=2;b1=3;b2=4}
-    PS C:\> $o2= @{a1=1;a2=2;b1=3;b2=5}
-    PS C:\> Compare-ObjectProperty $o1 $o2 -PropertyFilter a*
+        NOTE - if a property's type does not have a CompareTo() function, the property is converted to a
+        string for the comparison
 
     .EXAMPLE
-    $o1= @{a1=1;a2=2;b1=3;b2=4}
-    PS C:\> $o2= @{a1=1;a2=2;b1=3;b2=5}
-    PS C:\> Compare-ObjectProperty $o1 $o2 -IncludeEqual
-    Property Value SideIndicator
-    -------- ----- -------------
-    a1           1 ==
-    a2           2 ==
-    b1           3 ==
-    b2           4 <=
-    b2           5 =>
+        $o1= @{a1=1;a2=2;b1=3;b2=4}
+        PS C:\> $o2= @{a1=1;a2=2;b1=3;b2=5}
+        PS C:\> Compare-ObjectProperty $o1 $o2
 
+        Property Value SideIndicator
+        -------- ----- -------------
+        b2           4 <=
+        b2           5 =>
+
+    .EXAMPLE
+        $o1= @{a1=1;a2=2;b1=3;b2=4}
+        PS C:\> $o2= @{a1=1;a2=2;b1=3;b2=5}
+        PS C:\> Compare-ObjectProperty $o1 $o2 -PropertyFilter a*
+
+    .EXAMPLE
+        $o1= @{a1=1;a2=2;b1=3;b2=4}
+        PS C:\> $o2= @{a1=1;a2=2;b1=3;b2=5}
+        PS C:\> Compare-ObjectProperty $o1 $o2 -IncludeEqual
+        Property Value SideIndicator
+        -------- ----- -------------
+        a1           1 ==
+        a2           2 ==
+        b1           3 ==
+        b2           4 <=
+        b2           5 =>
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $true, Position = 0)]
+        [Parameter(Mandatory = $true)]
         [object]
         ${ReferenceObject},
 
-        [Parameter(Mandatory = $true, Position = 1)]
+        [Parameter(Mandatory = $true)]
         [object]
         ${DifferenceObject},
 
@@ -80,8 +80,8 @@ function Compare-ObjectProperty {
         if ($null -eq $inputObject) {
             return @{}
         } elseif ($inputObject -is [HashTable]) {
-            #We have to clone the hashtable because we are going to Remove Keys and if we don't
-            #clone it, we'll modify the original object
+            # We have to clone the hashtable because we are going to Remove Keys and if we don't
+            # clone it, we'll modify the original object
             return $inputObject.clone()
         } else {
             $h = @{}
@@ -97,31 +97,31 @@ function Compare-ObjectProperty {
     $diffH = Convert-PropertyToHash $DifferenceObject
 
     foreach ($filter in $PropertyFilter) {
-        foreach ($p in $refH.keys |Where-Object {$_ -like $filter}) {
+        foreach ($p in $refH.keys | Where-Object { $_ -like $filter }) {
             if (! ($diffH.Contains($p)) -and !($ExcludeDifferent)) {
-                Write-Output (New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p)})
+                Write-Output (New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p) })
             } else {
-                #We convert these to strings and do a string comparison because there are all sorts of .NET
-                #objects whose comparison functions don't yeild the expected results.
-                if ($refH.$p -AND ($refH.$p |Get-Member -MemberType Method -Name CompareTo)) {
+                # We convert these to strings and do a string comparison because there are all sorts of .NET
+                # objects whose comparison functions don't yeild the expected results.
+                if ($refH.$p -AND ($refH.$p | Get-Member -MemberType Method -Name CompareTo)) {
                     $Different = $refH.$p -ne $diffH.$p
                 } else {
                     $Different = ("" + $refH.$p) -ne ("" + $diffH.$p)
                 }
                 if ($Different -and !($ExcludeDifferent)) {
-                    Write-Output (New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p)})
-                    Write-Output (New-Object PSObject -Property @{ SideIndicator = "=>"; Property = $p; Value = $($diffH.$p)})
+                    Write-Output (New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p) })
+                    Write-Output (New-Object PSObject -Property @{ SideIndicator = "=>"; Property = $p; Value = $($diffH.$p) })
                 } elseif ($IncludeEqual) {
-                    Write-Output (New-Object PSObject -Property @{ SideIndicator = "=="; Property = $p; Value = $($refH.$p)})
+                    Write-Output (New-Object PSObject -Property @{ SideIndicator = "=="; Property = $p; Value = $($refH.$p) })
                 }
                 $diffH.Remove($p)
             }
         }
     }
 
-    if (!($ExcludeDifferent)) {
-        foreach ($p in $diffH.keys|Where-Object {$_ -like $PropertyFilter}) {
-            Write-Output (New-Object PSObject -Property @{ SideIndicator = "=>"; Property = $p; Value = $($diffH.$p)})
+    if (-not $ExcludeDifferent) {
+        foreach ($p in $diffH.keys | Where-Object { $_ -like $PropertyFilter }) {
+            New-Object PSObject -Property @{ SideIndicator = "=>"; Property = $p; Value = $($diffH.$p) }
         }
     }
 }

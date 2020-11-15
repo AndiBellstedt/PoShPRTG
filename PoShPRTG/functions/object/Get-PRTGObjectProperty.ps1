@@ -19,36 +19,35 @@
        Get-PRTGObjectProperty -ID 1 -Name Name, status
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'ReturnAll',
+    [CmdletBinding(
+        DefaultParameterSetName = 'ReturnAll',
         SupportsShouldProcess = $false,
-        ConfirmImpact = 'Low')]
+        ConfirmImpact = 'Low'
+    )]
     [OutputType([PSCustomObject])]
     Param(
         # ID of the object to pause/resume
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript({ $_ -gt 0 })]
         [Alias('objID', 'ID')]
-        [int[]]$ObjectID,
+        [int[]]
+        $ObjectID,
 
         # Name of the object's property to get
-        [Parameter(Mandatory = $false,
-            ParameterSetName = 'Name',
-            Position = 1)]
+        [Parameter(Position = 1, ParameterSetName = 'Name')]
         [Alias('Name')]
         [ValidateNotNullOrEmpty()]
-        [string[]]$PropertyName,
+        [string[]]
+        $PropertyName,
 
         # SensorTree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
-    Begin {
-    }
+
+    Begin {}
 
     Process {
         foreach ($ID in $ObjectID) {
@@ -90,6 +89,5 @@
         }
     }
 
-    End {
-    }
+    End {}
 }

@@ -12,7 +12,7 @@
     .NOTES
        Author: Andreas Bellstedt
 
-       Created global Variables by the cmdlet:
+       Created variables by the cmdlet:
             $script:PRTGServer
             $script:PRTGUser
             $script:PRTGPass
@@ -41,43 +41,40 @@
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingUserNameAndPassWordParams", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
-    [CmdletBinding(DefaultParameterSetName='Credential',
-                   SupportsShouldProcess=$false,
-                   ConfirmImpact='Low')]
+    [CmdletBinding(DefaultParameterSetName = 'Credential', SupportsShouldProcess = $false, ConfirmImpact = 'Low')]
     [OutputType([XML])]
     Param(
         # Url for PRTG Server
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript({if($_ -match '//'){$false}else{$true}})]
+        [ValidateScript( { if ($_ -match '//') { $false }else { $true } })]
         [String]
         $Server,
 
-        [Parameter(Mandatory=$false)]
         [ValidateSet("HTTP", "HTTPS")]
         [ValidateNotNullOrEmpty()]
         [String]
         $protocol = "HTTPS",
 
-        [Parameter(Mandatory=$false,ParameterSetName='Credential',Position=1)]
+        [Parameter(Position = 1, ParameterSetName = 'Credential')]
         [System.Management.Automation.PSCredential]
         $Credential,
 
-        [Parameter(Mandatory=$true,ParameterSetName='PlainTextPassword',Position=1)]
-        [Parameter(Mandatory=$true,ParameterSetName='Hash',Position=1)]
+        [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'PlainTextPassword')]
+        [Parameter(Position = 1, Mandatory = $true, ParameterSetName = 'Hash')]
         [ValidateNotNullOrEmpty()]
         [String]
         $User,
 
-        [Parameter(Mandatory=$true,ParameterSetName='PlainTextPassword',Position=2)]
+        [Parameter(Position = 2, Mandatory = $true, ParameterSetName = 'PlainTextPassword')]
         [String]
         $PlainTextPassword,
 
-        [Parameter(Mandatory=$false,ParameterSetName='PlainTextPassword')]
+        [Parameter(ParameterSetName = 'PlainTextPassword')]
         [Switch]
         $Force,
 
-        [Parameter(Mandatory=$true,ParameterSetName='Hash',Position=2)]
+        [Parameter(Position = 2, Mandatory = $true, ParameterSetName = 'Hash')]
         [ValidateNotNullOrEmpty()]
         [String]
         $Hash,
@@ -91,35 +88,45 @@
     )
 
     switch ($protocol) {
-        'HTTP'  { $Prefix = 'http://' ; Write-Log -LogText "Unsecure $($protocol) connection detected. This is a security risk. Consider switch to HTTPS! Continue..." -LogType Warning -LogScope $MyInvocation.MyCommand.Name -Warning}
-        'HTTPS' { $Prefix = 'https://'; Write-Log -LogText "Secure $($protocol) connection. OK." -LogType Info -LogScope $MyInvocation.MyCommand.Name -DebugOutput }
-    }
-
-    if($PsCmdlet.ParameterSetName -eq 'Credential'){
-        if(-not $Credential) {
-            Write-Log -LogText "No credential specified! Credential is needed..." -LogType Warning -LogScope $MyInvocation.MyCommand.Name -Warning -NoFileStatus
-            $Credential = Get-Credential -Message "Please specify logon cedentials for PRTG" -UserName $User
+        'HTTP' {
+            $Prefix = 'http://'
+            Write-Log -LogText "Unsecure $($protocol) connection detected. This is a security risk. Consider switch to HTTPS! Continue..." -LogType Warning -LogScope $MyInvocation.MyCommand.Name -Warning
         }
-        if(($credential.UserName.Split('\')).count -gt 1) {
-            $User = $credential.UserName.Split('\')[1]
-        } else {
-            $User = $credential.UserName
-        }
-        $pass = $credential.GetNetworkCredential().Password
-    }
-
-    if($PsCmdlet.ParameterSetName -eq 'PlainTextPassword'){
-        if($Force) {
-            $pass = $PlainTextPassword
-        } else {
-            Write-Log -LogText "Plaintextpasswords without force parameter are not permitted!" -LogType Error -LogScope $MyInvocation.MyCommand.Name -Error -NoFileStatus
-            return
+        'HTTPS' {
+            $Prefix = 'https://'
+            Write-Log -LogText "Secure $($protocol) connection. OK." -LogType Info -LogScope $MyInvocation.MyCommand.Name -DebugOutput
         }
     }
 
-    if($PsCmdlet.ParameterSetName -ne 'Hash'){
-        $Hash = Invoke-WebRequest -Uri "$Prefix$server/api/getpasshash.htm?username=$User&password=$Pass" -Verbose:$false -Debug:$false -ErrorAction Stop | Select-Object -ExpandProperty content
-        Remove-Variable pass -Force -ErrorAction Ignore -Verbose:$false -Debug:$false -WhatIf:$false
+    switch ($PsCmdlet.ParameterSetName) {
+        'Credential' {
+            if (-not $Credential) {
+                Write-Log -LogText "No credential specified! Credential is needed..." -LogType Warning -LogScope $MyInvocation.MyCommand.Name -Warning -NoFileStatus
+                $Credential = Get-Credential -Message "Please specify logon cedentials for PRTG" -UserName $User
+            }
+
+            if (($credential.UserName.Split('\')).count -gt 1) {
+                $User = $credential.UserName.Split('\')[1]
+            } else {
+                $User = $credential.UserName
+            }
+
+            $pass = $credential.GetNetworkCredential().Password
+        }
+
+        'PlainTextPassword' {
+            if ($Force) {
+                $pass = $PlainTextPassword
+            } else {
+                Write-Log -LogText "Plaintextpasswords without force parameter are not permitted!" -LogType Error -LogScope $MyInvocation.MyCommand.Name -Error -NoFileStatus
+                return
+            }
+        }
+
+        'Hash' {
+            $Hash = Invoke-WebRequest -Uri "$Prefix$server/api/getpasshash.htm?username=$User&password=$Pass" -Verbose:$false -Debug:$false -ErrorAction Stop | Select-Object -ExpandProperty content
+            Remove-Variable pass -Force -ErrorAction Ignore -Verbose:$false -Debug:$false -WhatIf:$false
+        }
     }
 
     $script:PRTGServer = $Prefix + $server
@@ -127,15 +134,15 @@
     $script:PRTGPass = $Hash
     Write-Log -LogText "Connection to PRTG ($($script:PRTGServer)) as user $($script:PRTGUser)" -LogType Info -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -Console
 
-    if(-not $DoNotQuerySensorTree) {
+    if (-not $DoNotQuerySensorTree) {
         Invoke-PRTGSensorTreeRefresh -Server $script:PRTGServer -User $script:PRTGUser -Pass $script:PRTGPass -Verbose:$false
     }
 
-    if($PassThru) {
+    if ($PassThru) {
         $Result = New-Object -TypeName psobject -Property @{
-            Server = $Prefix + $server
-            User = $User
-            Pass = $Hash
+            Server         = $Prefix + $server
+            User           = $User
+            Pass           = $Hash
             Authentication = "&username=$User&passhash=$Hash"
         }
         $Result

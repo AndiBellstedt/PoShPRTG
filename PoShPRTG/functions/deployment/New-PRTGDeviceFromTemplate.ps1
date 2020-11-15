@@ -20,53 +20,56 @@
        New-PRTGDeviceFromTemplate -TemplateFolderStructure (Get-PRTGObject -Name "Template_group_name") -Destination (Get-PRTGProbes | Out-GridView -Title "Please select destination for new system" -OutputMode Single)
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'Medium')]
+        ConfirmImpact = 'Medium'
+    )]
     Param(
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$DeviceName = (Read-Host -Prompt "Name of new system"),
+        [String]
+        $DeviceName = (Read-Host -Prompt "Name of new system"),
 
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Hostname = (Read-Host -Prompt "Hostname for new system (leave empty, if same as name of new system)"),
+        [String]
+        $Hostname = (Read-Host -Prompt "Hostname for new system (leave empty, if same as name of new system)"),
 
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [int]$TemplateSystem = (Get-PRTGObject -Name "Basic operatingsystem" -Recursive -Type device -SensorTree $script:PRTGSensorTree | Sort-Object Fullname | Select-Object fullname, objID | Out-GridView -Title "Please specify operatingsystem for new system" -OutputMode Single | Select-Object -ExpandProperty ObjID),
+        [int]
+        $TemplateSystem = (Get-PRTGObject -Name "Basic operatingsystem" -Recursive -Type device -SensorTree $script:PRTGSensorTree | Sort-Object Fullname | Select-Object fullname, objID | Out-GridView -Title "Please specify operatingsystem for new system" -OutputMode Single | Select-Object -ExpandProperty ObjID),
 
-        [Parameter(Mandatory = $false)]
-        [int[]]$TemplateRole = (Get-PRTGObject -Name "Specific roles" -Recursive -Type device -SensorTree $script:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select roles for new system" -OutputMode Multiple | Select-Object -ExpandProperty ObjID),
+        [int[]]
+        $TemplateRole = (Get-PRTGObject -Name "Specific roles" -Recursive -Type device -SensorTree $script:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select roles for new system" -OutputMode Multiple | Select-Object -ExpandProperty ObjID),
 
-        [Parameter(Mandatory = $false)]
-        [string[]]$TemplateSensorFilter = "MUSS MANUELL*",
+        [string[]]
+        $TemplateSensorFilter = "MUSS MANUELL*",
 
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [int]$Destination = (Get-PRTGObject -Type group -SensorTree $script:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select destination for new system" -OutputMode Single  | Select-Object -ExpandProperty ObjID),
+        [int]
+        $Destination = (Get-PRTGObject -Type group -SensorTree $script:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select destination for new system" -OutputMode Single  | Select-Object -ExpandProperty ObjID),
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ( ($_.StartsWith("http")) ) { $true } else { $false } })]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
+
     [array]$CopyObjectCollection = @()
     if (-not $Hostname) { $Hostname = $DeviceName }
     [String]$TemplateTAGName = "Template_*"

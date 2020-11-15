@@ -28,32 +28,32 @@
     .EXAMPLE
        Show-PRTGTemplateSummaryFromObjectTAG -TemplateBaseID (Get-PRTGProbe -Name "MyTemplateProbe").ObjID
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $false,
-        ConfirmImpact = 'Low')]
+        ConfirmImpact = 'Low'
+    )]
     Param(
         # ID of the object to copy
-        [Parameter(Mandatory = $false,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {$_ -gt 0})]
         [Alias('objID', 'ID', 'ObjectId')]
-        [int]$TemplateBaseID = 1,
+        [int]
+        $TemplateBaseID = 1,
 
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {$_ -notcontains ("*", "?")})]
-        [string]$TemplateTAGNameIdentifier = "Template_",
+        [string]
+        $TemplateTAGNameIdentifier = "Template_",
 
-        [Parameter(Mandatory = $false)]
-        [switch]$IncludeNonMatching,
+        [switch]
+        $IncludeNonMatching,
 
         # SensorTree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
 
     #Build Template Role object for comparing against devices
@@ -105,6 +105,3 @@
 
     Write-Output $TemplateRoles
 }
-
-
-

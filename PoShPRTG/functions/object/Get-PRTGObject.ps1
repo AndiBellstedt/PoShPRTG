@@ -61,72 +61,63 @@
        Get-PRTGObject -FilterXPath "/prtg/sensortree/nodes/group//probenode" -SensorTree $SensorTree
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'ReturnAll',
+    [CmdletBinding(
+        DefaultParameterSetName = 'ReturnAll',
         SupportsShouldProcess = $false,
-        ConfirmImpact = 'Low')]
+        ConfirmImpact = 'Low'
+    )]
     Param(
-        [Parameter(Mandatory = $true,
-            ParameterSetName = 'ID',
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
-        [Parameter(Mandatory = $false,
-            ParameterSetName = 'ReturnAll',
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ID', Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ReturnAll', Mandatory = $false, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 } )]
         [Alias('objID', 'ID')]
-        [int[]]$ObjectID,
+        [int[]]
+        $ObjectID,
 
-        [Parameter(Mandatory = $true,
-            ParameterSetName = 'Name',
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
-        [String[]]$Name,
+        [Parameter(ParameterSetName = 'Name', Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [String[]]
+        $Name,
 
-        [Parameter(Mandatory = $true,
-            ParameterSetName = 'FullName',
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
-        [String[]]$FullName,
+        [Parameter(ParameterSetName = 'FullName', Position = 0, Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [String[]]
+        $FullName,
 
-        [Parameter(Mandatory = $true,
-            ParameterSetName = 'XPath',
-            Position = 0)]
-        [String[]]$FilterXPath,
+        [Parameter(ParameterSetName = 'XPath', Position = 0, Mandatory = $true)]
+        [String[]]
+        $FilterXPath,
 
-        [Parameter(Mandatory = $false, ParameterSetName = 'ReturnAll')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'ID')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'FullName')]
+        [Parameter(ParameterSetName = 'ReturnAll')]
+        [Parameter(ParameterSetName = 'ID')]
+        [Parameter(ParameterSetName = 'Name')]
+        [Parameter(ParameterSetName = 'FullName')]
         [ValidateSet('group', 'device', 'sensor', 'probenode')]
         [ValidateNotNullOrEmpty()]
-        [string[]]$Type = ('probenode', 'group', 'device', 'sensor'),
+        [string[]]
+        $Type = ('group', 'device', 'sensor', 'probenode'),
 
-        [Parameter(Mandatory = $false, ParameterSetName = 'ReturnAll')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'ID')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'FullName')]
+        [Parameter(ParameterSetName = 'ReturnAll')]
+        [Parameter(ParameterSetName = 'ID')]
+        [Parameter(ParameterSetName = 'Name')]
+        [Parameter(ParameterSetName = 'FullName')]
         [switch]$Recursive,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
-    Begin {
-    }
+
+    Begin {}
 
     Process {
         [Array]$result = @()
         switch ($PsCmdlet.ParameterSetName) {
-            'ID' { $ParameterSet = 'ID'       }
-            'Name' { $ParameterSet = 'Name'     }
+            'ID' { $ParameterSet = 'ID' }
+            'Name' { $ParameterSet = 'Name' }
             'Fullname' { $ParameterSet = 'Fullname' }
-            'XPath' { $ParameterSet = 'XPath'    }
-            {$_ -eq 'ReturnAll' -and $ObjectID } { $ParameterSet = 'ID' }
+            'XPath' { $ParameterSet = 'XPath' }
+            { $_ -eq 'ReturnAll' -and $ObjectID } { $ParameterSet = 'ID' }
             Default { $ParameterSet = 'ReturnAll' }
         }
         #Write-Host "$ParameterSet - $ObjectID" -ForegroundColor Green
@@ -274,6 +265,5 @@
         }
     }
 
-    End {
-    }
+    End {}
 }

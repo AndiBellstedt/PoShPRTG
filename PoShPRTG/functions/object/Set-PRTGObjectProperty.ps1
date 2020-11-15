@@ -23,70 +23,71 @@
        Set-PRTGObjectProperty -ObjectId 1 -PropertyName "Name" -PropertyValue "NewValue" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
 
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default',
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $true,
-        ConfirmImpact = 'medium')]
+        ConfirmImpact = 'medium'
+    )]
     Param(
         # ID of the object to pause/resume
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            Position = 0)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -ge 0})]
+        [ValidateScript( { $_ -ge 0 } )]
         [Alias('ObjID', 'ID')]
-        [int[]]$ObjectId,
+        [int[]]
+        $ObjectId,
 
         # Name of the object's property to set
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$PropertyName,
+        [string]
+        $PropertyName,
 
         # Value to which to set the property of the object
-        [Parameter(Mandatory = $false)]
-        [string]$PropertyValue,
+        [string]
+        $PropertyValue,
 
         # returns the changed object
-        [Parameter(Mandatory = $false)]
-        [Switch]$PassThru,
+        [Switch]
+        $PassThru,
 
         # Url for PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {if ( ($_.StartsWith("http")) ) {$true}else {$false}})]
-        [String]$Server = $script:PRTGServer,
+        [ValidateScript( { if ($_.StartsWith("http")) { $true } else { $false } } )]
+        [String]
+        $Server = $script:PRTGServer,
 
         # User for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$User = $script:PRTGUser,
+        [String]
+        $User = $script:PRTGUser,
 
         # Password or PassHash for PRTG Authentication
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String]$Pass = $script:PRTGPass,
+        [String]
+        $Pass = $script:PRTGPass,
 
         # sensortree from PRTG Server
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [xml]$SensorTree = $script:PRTGSensorTree
+        [xml]
+        $SensorTree = $script:PRTGSensorTree
     )
-    Begin {
-        $body = @{
-            id       = 0
-            action   = 1
-            name     = $PropertyName
-            value    = $PropertyValue
-            username = $User
-            passhash = $Pass
-        }
-    }
+
+    Begin {}
 
     Process {
         foreach ($id in $ObjectId) {
-            $body.id = $id
+            $body = @{
+                id       = $id
+                action   = 1
+                name     = $PropertyName
+                value    = $PropertyValue
+                username = $User
+                passhash = $Pass
+            }
+
             if ($pscmdlet.ShouldProcess("objID $Id", "Set property '$PropertyName' to '$PropertyValue' on PRTG object")) {
-                #Set property in PRTG
+                # Set property in PRTG
                 try {
                     Write-Log -LogText "Set property ""$PropertyName"" to ""$PropertyValue"" on object ID $id ($Server)" -LogType Set -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
                     $null = Invoke-WebRequest -UseBasicParsing -Uri "$Server/api/setobjectproperty.htm" -Method Get -Body $body -Verbose:$false
@@ -94,20 +95,17 @@
                     Write-Log -LogText "Failed to set value $PropertyValue on property $PropertyName. $($_.exception.message)" -LogType Error -LogScope $MyInvocation.MyCommand.Name -Error -NoFileStatus
                 }
 
-                #set property in SensorTree Variable
+                # Set property in SensorTree Variable
                 if ($PropertyName -eq "id") {
                     $SensorTree.SelectSingleNode("/prtg/sensortree/nodes/group//*[id=$($id)]").SetAttribute($PropertyName, $PropertyValue)
                 }
                 $SensorTree.SelectSingleNode("/prtg/sensortree/nodes/group//*[id=$($id)]/$PropertyName").InnerText = $PropertyValue
 
-                #Write-Output
-                if ($PassThru) {
-                    Write-Output (Get-PRTGObject -ObjectID $id -SensorTree $SensorTree -Verbose:$false)
-                }
+                # Write-Output
+                if ($PassThru) { Get-PRTGObject -ObjectID $id -SensorTree $SensorTree -Verbose:$false }
             }
         }
     }
 
-    End {
-    }
+    End {}
 }

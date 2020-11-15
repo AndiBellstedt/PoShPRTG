@@ -19,8 +19,7 @@ if ($PoShPRTG_importIndividualFiles) { $importIndividualFiles = $true }
 if (Test-Path (Resolve-PSFPath -Path "$($script:ModuleRoot)\..\.git" -SingleItem -NewChild)) { $importIndividualFiles = $true }
 if ("<was not compiled>" -eq '<was not compiled>') { $importIndividualFiles = $true }
 
-function Import-ModuleFile
-{
+function Import-ModuleFile {
     <#
         .SYNOPSIS
             Loads files into the module on module import.
@@ -45,30 +44,35 @@ function Import-ModuleFile
         $Path
     )
 
-    if ($doDotSource) { . (Resolve-Path $Path) }
-    else { $ExecutionContext.InvokeCommand.InvokeScript($false, ([scriptblock]::Create([io.file]::ReadAllText((Resolve-Path $Path)))), $null, $null) }
+    $resolvedPath = $ExecutionContext.SessionState.Path.GetResolvedPSPathFromPSPath($Path).ProviderPath
+    if ($doDotSource) {
+        . $resolvedPath
+    } else {
+        $ExecutionContext.InvokeCommand.InvokeScript($false, ([scriptblock]::Create([io.file]::ReadAllText($resolvedPath))), $null, $null)
+    }
 }
 
 #region Load individual files
-if ($importIndividualFiles)
-{
+if ($importIndividualFiles) {
     # Execute Preimport actions
-    . Import-ModuleFile -Path "$ModuleRoot\internal\scripts\preimport.ps1"
+    foreach ($path in (& "$ModuleRoot\internal\scripts\preimport.ps1")) {
+        . Import-ModuleFile -Path $path
+    }
 
     # Import all internal functions
-    foreach ($function in (Get-ChildItem "$ModuleRoot\internal\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
-    {
+    foreach ($function in (Get-ChildItem "$ModuleRoot\internal\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore)) {
         . Import-ModuleFile -Path $function.FullName
     }
 
     # Import all public functions
-    foreach ($function in (Get-ChildItem "$ModuleRoot\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore))
-    {
+    foreach ($function in (Get-ChildItem "$ModuleRoot\functions" -Filter "*.ps1" -Recurse -ErrorAction Ignore)) {
         . Import-ModuleFile -Path $function.FullName
     }
 
     # Execute Postimport actions
-    . Import-ModuleFile -Path "$ModuleRoot\internal\scripts\postimport.ps1"
+    foreach ($path in (& "$ModuleRoot\internal\scripts\postimport.ps1")) {
+        . Import-ModuleFile -Path $path
+    }
 
     # End it here, do not load compiled code below
     return
