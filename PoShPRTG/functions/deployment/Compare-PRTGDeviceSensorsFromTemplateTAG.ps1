@@ -14,17 +14,19 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Compare-PRTGDeviceSensorsFromTemplateTAG
-
-    .EXAMPLE
        Compare-PRTGDeviceSensorsFromTemplateTAG -DeviceID 200 -TemplateBaseID 100
+
+       Invokes comparisan of device with ID 200 against template device with ID 100
 
     .EXAMPLE
        Compare-PRTGDeviceSensorsFromTemplateTAG -DeviceID 200 -TemplateBaseID 100 -TemplateTAGNameIdentifier "MyPersonalTemplate_"
 
-    .EXAMPLE
-       Compare-PRTGDeviceSensorsFromTemplateTAG -TemplateBaseID (Get-PRTGProbe -Name "MyTemplateProbe").ObjID -IncludeEqual
+       Invokes comparisan of device with ID 200 against template device with ID 100 and use "MyPersonalTemplate_" as identifier for templates
 
+    .EXAMPLE
+       Get-PRTGDevice -Name "MyDevice" | Compare-PRTGDeviceSensorsFromTemplateTAG -TemplateBaseID (Get-PRTGProbe -Name "MyTemplateProbe").ObjID -IncludeEqual
+
+        Invokes comparisan of "MyDevice" against all template devices beneath MyTemplateProbe
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
@@ -33,24 +35,28 @@
     )]
     Param(
         # ID of the object to copy
-        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( { $_ -gt 0 })]
         [Alias('objID', 'ID', 'ObjectId')]
         [int]
         $DeviceID,
 
+        # Base id of the template
         [ValidateNotNullOrEmpty()]
         [int]
         $TemplateBaseID = 1,
 
+        # Filter text identifier for template tags in a device
         [ValidateNotNullOrEmpty()]
         [String]
         $TemplateTAGNameIdentifier = "Template_",
 
+        # Compare properties inside a sensor as well as the existence inside the template
         [switch]
         $ComparePropertiesInObject,
 
+        # Output objects that meet the template, as well as diffs to template
         [switch]
         $IncludeEqual,
 
@@ -60,9 +66,9 @@
         $SensorTree = $script:PRTGSensorTree
     )
 
-    Begin {}
+    begin {}
 
-    Process {
+    process {
         Write-Log -LogText "Getting device to validate with object ID $($DeviceID)" -LogType Query -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
         $DevicesToValidate = Get-PRTGDevice -ObjectId $DeviceID -SensorTree $SensorTree
 
@@ -159,9 +165,9 @@
                 $result = $result | Where-Object SideIndicator -ne '=='
             }
 
-            Write-Output $result
+            $result
         }
     }
 
-    End {}
+    end {}
 }

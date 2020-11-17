@@ -1,4 +1,4 @@
-<#
+﻿<#
 Add all things you want to run before importing the main function code.
 
 WARNING: ONLY provide paths to files!

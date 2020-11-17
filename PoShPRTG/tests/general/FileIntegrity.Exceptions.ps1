@@ -28,10 +28,10 @@ $global:BannedCommands = @(
 #>
 $global:MayContainCommand = @{
     "Write-Host"        = @( "Write-Log.ps1" )
-    "Write-Verbose"     = @()
-    "Write-Warning"     = @()
-    "Write-Error"       = @()
-    "Write-Output"      = @()
-    "Write-Information" = @()
-    "Write-Debug"       = @()
+    "Write-Verbose"     = @( "Write-Log.ps1" )
+    "Write-Warning"     = @( "Write-Log.ps1" )
+    "Write-Error"       = @( "Write-Log.ps1" )
+    "Write-Output"      = @( "Write-Log.ps1" )
+    "Write-Information" = @( "Write-Log.ps1" )
+    "Write-Debug"       = @( "Write-Log.ps1" )
 }

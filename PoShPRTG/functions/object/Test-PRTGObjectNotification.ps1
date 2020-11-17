@@ -6,6 +6,12 @@
     .DESCRIPTION
        Test a notifcation action for a object
 
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
+
     .NOTES
        Author: Andreas Bellstedt
 
@@ -15,8 +21,7 @@
     .EXAMPLE
        Test-PRTGObjectNotification -ObjectId 1
 
-       Test-PRTGObjectNotification -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
-
+       Test a notifcation action for object with ID 1
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',

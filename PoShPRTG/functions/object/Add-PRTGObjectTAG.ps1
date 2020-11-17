@@ -1,26 +1,27 @@
 ﻿function Add-PRTGObjectTAG {
     <#
     .Synopsis
-       Add-PRTGObjectTAG
+        Add-PRTGObjectTAG
 
     .DESCRIPTION
-       Add a text to the tags property of an PRTG object
+        Add a text to the tags property of an PRTG object
+
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
 
     .NOTES
-       Author: Andreas Bellstedt
+        Author: Andreas Bellstedt
 
     .LINK
-       https://github.com/AndiBellstedt/PoShPRTG
+        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Add-PRTGObjectTAG -ObjectId 1 -TAGName "NewName"
+        Add-PRTGObjectTAG -ObjectId 1 -TAGName "NewName"
 
-    .EXAMPLE
-       Add-PRTGObjectTAG -ObjectId 1 -TAGName "NewName" -PassThru
-
-    .EXAMPLE
-       Add-PRTGObjectTAG -ObjectId 1 -TAGName "NewName" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111" -SensorTree $PRTGSensorTree -PassThru
-
+        Add TAG "NewName" to object 1
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
@@ -29,7 +30,7 @@
     )]
     Param(
         # ID of the object to pause/resume
-        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( { $_ -gt 0 })]
         [Alias('ObjID', 'ID')]
@@ -37,14 +38,14 @@
         $ObjectId,
 
         # Name of the object's property to set
-        [Parameter(Position = 1, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $false)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $false)]
         [ValidateNotNullOrEmpty()]
         [string[]]
         $TAGName,
 
         # Url for PRTG Server
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( { if ( ($_.StartsWith("http")) ) { $true } else { $false } })]
+        [ValidateScript( { if ( ($_.StartsWith("http")) ) { $true } else { $false } } )]
         [String]
         $Server = $script:PRTGServer,
 
@@ -140,7 +141,7 @@
             }
 
             #output the object
-            if ($PassThru) { Write-Output $Object }
+            if ($PassThru) { $Object }
 
             #clear up the variable mess
             Remove-Variable TAG, TAGListExisting, TAGListToAdd, TAGListToSet, Object, MessageText -Force -ErrorAction Ignore -Verbose:$false -Debug:$false -WhatIf:$false

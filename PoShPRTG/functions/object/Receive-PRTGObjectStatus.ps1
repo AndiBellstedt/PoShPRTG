@@ -1,29 +1,32 @@
 ﻿Function Receive-PRTGObjectStatus {
     <#
     .Synopsis
-       Receive-PRTGObjectStatus
+        Receive-PRTGObjectStatus
 
     .DESCRIPTION
-       Query the status of an object directly from PRTGserver and returns.
-       Difference to Get-PRTGObject is, that "Get-PRTGObject" is working on a modfified sensortree variable in the memory and not on livedata from PRTGServer
+        Query the status of an object directly from PRTGserver and returns.
+        Difference to Get-PRTGObject is, that "Get-PRTGObject" is working on a modfified sensortree variable in the memory and not on livedata from PRTGServer
 
     .NOTES
-       Author: Andreas Bellstedt
+        Author: Andreas Bellstedt
 
-       adopted from PSGallery Module "PSPRTG"
-       Author: Sam-Martin
-       Github: https://github.com/Sam-Martin/prtg-powershell
+        adopted from PSGallery Module "PSPRTG"
+        Author: Sam-Martin
+        Github: https://github.com/Sam-Martin/prtg-powershell
 
     .LINK
-       https://github.com/AndiBellstedt/PoShPRTG
+        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Receive-PRTGObjectStatus -ObjectId 1
-       Receive-PRTGObjectStatus -ID 1
+        PS C:\>Receive-PRTGObjectStatus -ObjectId 1
+        PS C:\>Receive-PRTGObjectStatus -ID 1
+
+        Query current status of object 1 live from PRTG server. (not using the value in the sensor tree)
 
     .EXAMPLE
-       Receive-PRTGObjectStatus -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+        PS C:\>Receive-PRTGObjectStatus -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
+        Query current status of object 1 live from PRTG server. (not using the value in the sensor tree)
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',

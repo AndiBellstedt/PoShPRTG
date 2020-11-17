@@ -18,34 +18,45 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Receive-PRTGObject
+       PS C:\>Receive-PRTGObject
+
+       Receive devices live from PRTG server (not using the cached sensor tree info)
 
     .EXAMPLE
-       Receive-PRTGObject -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
-    #>
+       PS C:\>Receive-PRTGObject -Content sensors
+
+       Receive sensors live from PRTG server (not using the cached sensor tree info)
+
+       #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
         SupportsShouldProcess = $false,
         ConfirmImpact = 'low'
     )]
     Param(
+        # Number of maximal results
         [int]
-        $numResults = 99999,
+        $NumResults = 99999,
 
+        # Properties to query
         [string]
-        $columns = "objid,type,name,tags,active,host",
+        $Columns = "objid,type,name,tags,active,host",
 
+        # Type of device to query
         [ValidateSet("sensortree", "groups", "sensors", "devices", "tickets", "messages", "values", "channels", "reports", "storedreports", "ticketdata")]
         [string]
-        $content = "devices",
+        $Content = "devices",
 
+        # sorting the output
         [string]
         $SortBy = "objid",
 
+        # Direction to sort the output
         [ValidateSet("Desc", "Asc")]
         [string]
         $SortDirection = "Desc",
 
+        # Filter hashtable to filter out objects from the query
         [hashtable]
         $Filters,
 

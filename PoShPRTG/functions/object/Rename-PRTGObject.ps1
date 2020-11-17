@@ -1,27 +1,36 @@
 ﻿function Rename-PRTGObject {
     <#
     .Synopsis
-       Rename-PRTGObject
+        Rename-PRTGObject
 
     .DESCRIPTION
-       Rename an PRTG object
+        Rename an PRTG object
+
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
 
     .NOTES
-       Author: Andreas Bellstedt
+        Author: Andreas Bellstedt
 
-       adopted from PSGallery Module "PSPRTG"
-       Author: Sam-Martin
-       Github: https://github.com/Sam-Martin/prtg-powershell
+        adopted from PSGallery Module "PSPRTG"
+        Author: Sam-Martin
+        Github: https://github.com/Sam-Martin/prtg-powershell
 
     .LINK
-       https://github.com/AndiBellstedt/PoShPRTG
+        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Rename-PRTGObject -ObjectId 1
+        Rename-PRTGObject -ObjectId 1 -NewName "NewName"
+
+        Rename object with ID 1 to "NewName"
 
     .EXAMPLE
-       Rename-PRTGObject -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+        Get-PRTGObject "MyDevice" | Rename-PRTGObject -NewName "MyNewDevice"
 
+        Rename "MyDevice" to "MyNewDevice"
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
@@ -36,7 +45,7 @@
         [int]
         $ObjectId,
 
-        # Message to associate with the pause event
+        # New name of the object
         [string]
         $NewName,
 

@@ -6,6 +6,12 @@
     .DESCRIPTION
        Set the property of an PRTG object
 
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
+
     .NOTES
        Author: Andreas Bellstedt
 
@@ -19,9 +25,12 @@
     .EXAMPLE
        Set-PRTGObjectProperty -ObjectId 1 -PropertyName "Name" -PropertyValue "NewValue"
 
+       Set object property in PRTG
+
     .EXAMPLE
        Set-PRTGObjectProperty -ObjectId 1 -PropertyName "Name" -PropertyValue "NewValue" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
 
+       Set object property in PRTG
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',

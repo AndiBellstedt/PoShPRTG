@@ -51,23 +51,25 @@ function Compare-ObjectProperty {
     #>
     [CmdletBinding()]
     param(
+        # ReferenceObject
         [Parameter(Mandatory = $true)]
         [object]
         ${ReferenceObject},
 
+        # DifferenceObject
         [Parameter(Mandatory = $true)]
         [object]
         ${DifferenceObject},
 
-        #You can specify which properties to compare using a wildcard (using the -LIKE operator)
+        # You can specify which properties to compare using a wildcard (using the -LIKE operator)
         [String[]]
         ${PropertyFilter} = "*",
 
-        #Don't include any properties that are different
+        # Don't include any properties that are different
         [switch]
         ${ExcludeDifferent},
 
-        #Include the properties which are equal
+        # Include the properties which are equal
         [switch]
         ${IncludeEqual}
     )
@@ -99,7 +101,7 @@ function Compare-ObjectProperty {
     foreach ($filter in $PropertyFilter) {
         foreach ($p in $refH.keys | Where-Object { $_ -like $filter }) {
             if (! ($diffH.Contains($p)) -and !($ExcludeDifferent)) {
-                Write-Output (New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p) })
+                New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p) }
             } else {
                 # We convert these to strings and do a string comparison because there are all sorts of .NET
                 # objects whose comparison functions don't yeild the expected results.
@@ -109,10 +111,10 @@ function Compare-ObjectProperty {
                     $Different = ("" + $refH.$p) -ne ("" + $diffH.$p)
                 }
                 if ($Different -and !($ExcludeDifferent)) {
-                    Write-Output (New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p) })
-                    Write-Output (New-Object PSObject -Property @{ SideIndicator = "=>"; Property = $p; Value = $($diffH.$p) })
+                    New-Object PSObject -Property @{ SideIndicator = "<="; Property = $p; Value = $($refH.$p) }
+                    New-Object PSObject -Property @{ SideIndicator = "=>"; Property = $p; Value = $($diffH.$p) }
                 } elseif ($IncludeEqual) {
-                    Write-Output (New-Object PSObject -Property @{ SideIndicator = "=="; Property = $p; Value = $($refH.$p) })
+                    New-Object PSObject -Property @{ SideIndicator = "=="; Property = $p; Value = $($refH.$p) }
                 }
                 $diffH.Remove($p)
             }

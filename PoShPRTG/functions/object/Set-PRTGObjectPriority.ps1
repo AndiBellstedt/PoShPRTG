@@ -1,25 +1,37 @@
 ﻿function Set-PRTGObjectPriority {
     <#
     .Synopsis
-       Set-PRTGObjectPriority
+        Set-PRTGObjectPriority
+
     .DESCRIPTION
-       Set priority value on a PRTG object
+        Set priority value on a PRTG object
+
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
 
     .NOTES
-       Author: Andreas Bellstedt
+        Author: Andreas Bellstedt
 
     .LINK
-       https://github.com/AndiBellstedt/PoShPRTG
+        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Set-PRTGObjectPriority -ObjectId 1 -Priority 3
+        Set-PRTGObjectPriority -ObjectId 1 -Priority 3
+
+        Set priority on object 1
 
     .EXAMPLE
-       Set-PRTGObjectPriority -ObjectId 1 -Priority 3 -PassThru
+        Set-PRTGObjectPriority -ObjectId 1 -Priority 3 -PassThru
+
+        Set priority on object 1 and output the object
 
     .EXAMPLE
-       Set-PRTGObjectPriority -ObjectId 1 -Priority 3 -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
+        Set-PRTGObjectPriority -ObjectId 1 -Priority 3 -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
 
+        Set priority on object 1 on explicitly specified server with custom credentials.
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',

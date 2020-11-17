@@ -1,27 +1,42 @@
 ﻿function Disable-PRTGObject {
     <#
     .Synopsis
-       Disable-PRTGObject
+        Disable-PRTGObject
 
     .DESCRIPTION
-       Pause an PRTG object
+        Pause an PRTG object
+
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
 
     .NOTES
-       Author: Andreas Bellstedt
+        Author: Andreas Bellstedt
 
-       adopted from PSGallery Module "PSPRTG"
-       Author: Sam-Martin
-       Github: https://github.com/Sam-Martin/prtg-powershell
+        adopted from PSGallery Module "PSPRTG"
+        Author: Sam-Martin
+        Github: https://github.com/Sam-Martin/prtg-powershell
 
     .LINK
-       https://github.com/AndiBellstedt/PoShPRTG
+        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Disable-PRTGObject -ObjectId 1
-       Disable-PRTGObject -ObjectId 1 -Message "Done by User01"
-       Disable-PRTGObject -ObjectId 1 -Message "Done by User01" -Minutes 1
-       Disable-PRTGObject -ObjectId 1 -Message "Done by User01" -Minutes 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+        Disable-PRTGObject -ObjectId 1
 
+        Disable object with ID 1 for unlimited time
+        No message is used.
+
+    .EXAMPLE
+        Disable-PRTGObject -ObjectId 1 -Message "Done by User01"
+
+        Disable object with ID 1 for unlimited time with specified message.
+
+    .EXAMPLE
+        Disable-PRTGObject -ObjectId 1 -Message "Done by User01" -Minutes 1
+
+        Disable object with ID 1 for one minute with specified message.
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
@@ -30,15 +45,16 @@
     )]
     Param(
         # ID of the object to pause
-        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( { $_ -gt 0 })]
+        [ValidateScript( { $_ -gt 0 } )]
         [Alias('ObjID')]
         [int[]]
         $ObjectId,
 
         # Message to associate with the pause event
-        [string]$Message,
+        [string]
+        $Message,
 
         # Length of time in minutes to pause the object, $null for indefinite
         [int]
@@ -54,7 +70,7 @@
 
         # Url for PRTG Server
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( { if (($_.StartsWith("http"))) { $true } else { $false } })]
+        [ValidateScript( { if ($_.StartsWith("http")) { $true } else { $false } } )]
         [String]
         $Server = $script:PRTGServer,
 
@@ -74,21 +90,19 @@
         $SensorTree = $script:PRTGSensorTree
     )
 
-    Begin {
-        $body = @{
-            id       = 0
-            action   = 0
-            username = $User
-            passhash = $Pass
-        }
+    begin {}
 
-        if ($Minutes) { $body.Add("duration", $Minutes) }
-        if ($Message) { $body.Add("pausemsg", $Message) }
-    }
-
-    Process {
+    process {
         foreach ($id in $ObjectId) {
-            $body.id = $id
+            $body = @{
+                id       = $id
+                action   = 0
+                username = $User
+                passhash = $Pass
+            }
+            if ($Minutes) { $body.Add("duration", $Minutes) }
+            if ($Message) { $body.Add("pausemsg", $Message) }
+
             if ($pscmdlet.ShouldProcess("objID $Id", "Disable PRTG object")) {
                 try {
                     if ($Minutes) {
@@ -130,5 +144,5 @@
         }
     }
 
-    End {}
+    end {}
 }

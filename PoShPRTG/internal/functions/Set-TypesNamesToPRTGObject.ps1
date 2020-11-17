@@ -10,11 +10,13 @@
        Author: Andreas Bellstedt
 
     .EXAMPLE
-       Set-TypesNamesToPRTGObject $PRTGObject
-
+        Set-TypesNamesToPRTGObject $PRTGObject
+        Work on the specified object
     #>
-    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
+    [CmdletBinding(ConfirmImpact="low", SupportsShouldProcess=$false)]
     param(
+        # Object to work on
         $PRTGObject
     )
 

@@ -3,7 +3,7 @@
     ModuleToProcess       = 'PoShPRTG.psm1'
 
     # Version number of this module.
-    ModuleVersion         = '1.6.0.0'
+    ModuleVersion         = '1.5.1.0'
 
     # ID used to uniquely identify this module
     GUID                  = '2dd57587-dbe7-4f17-a5fb-3c9d9999af76'
@@ -91,8 +91,8 @@
         'Compare-PRTGDeviceSensorsFromTemplateTAG',
 
         # Rollout- / Deployment functions
-        'New-PRTGDefaultFolderStructureToProbe.ps1',
-        'New-PRTGDeviceFromTemplate.ps1'
+        'New-PRTGDefaultFolderStructureToProbe',
+        'New-PRTGDeviceFromTemplate'
     )
 
     # Cmdlets to export from this module

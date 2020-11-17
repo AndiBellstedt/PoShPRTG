@@ -14,52 +14,62 @@
 
     .EXAMPLE
        Get-PRTGObject
+
        Query all objects from the default sensortree (global variable after connect to PRTG server)
 
     .EXAMPLE
        Get-PRTGObject -SensorTree $SensorTree
+
        Query objects by name from a non default sensortree
 
     .EXAMPLE
        Get-PRTGObject -Name "Object01"
+
        Query objects by name
 
     .EXAMPLE
        Get-PRTGObject -Name "Object01", "Object*" -Recursive
+
        Query objects by name with all subobjects
 
     .EXAMPLE
        Get-PRTGObject -Name "Object01", "Object*" -Type 'probenode', 'group', 'device', 'sensor'
+
        Query only selected type of objects by name
 
     .EXAMPLE
-       Get-PRTGObject -Name "Object01", "Object*" -Type 'probenode', 'group', 'device', 'sensor' -Recursive
+       PS C:\>Get-PRTGObject -Name "Object01", "Object*" -Type 'probenode', 'group', 'device', 'sensor' -Recursive
+
        Query only selected type of objects by name with all subobjects
 
-       Get-PRTGObject -Name "Object01", "Object*" -SensorTree $SensorTree
-       # Query objects by name from a non default sensortree
+       PS C:\>Get-PRTGObject -Name "Object01", "Object*" -SensorTree $SensorTree
 
-       "Object01" | PRTGObject
-       # Piping is also possible
+       Query objects by name from a non default sensortree
+
+       PS C:\>"Object01" | PRTGObject
+
+       Piping is also possible
 
     .EXAMPLE
-       Get-PRTGObject -ObjectID 1
+       PS C:\>Get-PRTGObject -ObjectID 1
+
        Query objects by object ID
 
-       Get-PRTGObject -ObjID 1 , 100
-       Get-PRTGObject -ID 1, 100
-       # all the parameter combination from the example above are also possible
+       PS C:\>Get-PRTGObject -ObjID 1 , 100
+       PS C:\>Get-PRTGObject -ID 1, 100
 
-       1 | Get-PRTGObject
-       # Piping is also possible
+       all the parameter combination from the example above are also possible
+
+       PS C:\>1 | Get-PRTGObject
+       Piping is also possible
 
     .EXAMPLE
-       Get-PRTGObject -FilterXPath "/prtg/sensortree/nodes/group//*[id='1']"
-       #for people who know what they do... :-)
-       #query objects directly by XPatch filter string
+       PS C:\>Get-PRTGObject -FilterXPath "/prtg/sensortree/nodes/group//*[id='1']"
 
-       Get-PRTGObject -FilterXPath "/prtg/sensortree/nodes/group//probenode" -SensorTree $SensorTree
+       for people who know what they do... :-)
+       query objects directly by XPatch filter string
 
+       PS C:\>Get-PRTGObject -FilterXPath "/prtg/sensortree/nodes/group//probenode" -SensorTree $SensorTree
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'ReturnAll',
@@ -67,6 +77,7 @@
         ConfirmImpact = 'Low'
     )]
     Param(
+        # ID of the PRTG object
         [Parameter(ParameterSetName = 'ID', Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Parameter(ParameterSetName = 'ReturnAll', Mandatory = $false, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
@@ -75,18 +86,22 @@
         [int[]]
         $ObjectID,
 
+        # The name of the object
         [Parameter(ParameterSetName = 'Name', Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [String[]]
         $Name,
 
+        # The fullname of the object
         [Parameter(ParameterSetName = 'FullName', Position = 0, Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [String[]]
         $FullName,
 
+        # XPath filter expression for advanced usage
         [Parameter(ParameterSetName = 'XPath', Position = 0, Mandatory = $true)]
         [String[]]
         $FilterXPath,
 
+        # Filter of types
         [Parameter(ParameterSetName = 'ReturnAll')]
         [Parameter(ParameterSetName = 'ID')]
         [Parameter(ParameterSetName = 'Name')]
@@ -96,11 +111,13 @@
         [string[]]
         $Type = ('group', 'device', 'sensor', 'probenode'),
 
+        # Parse recursivly through the groups
         [Parameter(ParameterSetName = 'ReturnAll')]
         [Parameter(ParameterSetName = 'ID')]
         [Parameter(ParameterSetName = 'Name')]
         [Parameter(ParameterSetName = 'FullName')]
-        [switch]$Recursive,
+        [switch]
+        $Recursive,
 
         # sensortree from PRTG Server
         [ValidateNotNullOrEmpty()]
@@ -259,7 +276,7 @@
             if ($PsCmdlet.ParameterSetName -ne 'ReturnAll' -and $Type.count -gt 1) {
                 $result = $result | select-object * -Unique
             }
-            Write-Output (Set-TypesNamesToPRTGObject -PRTGObject $result)
+            Set-TypesNamesToPRTGObject -PRTGObject $result
         } else {
             Write-Log -LogText "Error query object by $($PsCmdlet.ParameterSetName). No object found!" -LogType Error -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -Error
         }

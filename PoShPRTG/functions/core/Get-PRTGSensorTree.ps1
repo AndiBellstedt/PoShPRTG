@@ -15,9 +15,12 @@
     .EXAMPLE
        Get-PRTGSensorTree
 
+       Query the sensortree for caching prtg current object configuration.
+
     .EXAMPLE
        Get-PRTGSensorTree -Server "https://prtg.corp.customer.com" -User "prtgadmin" -Pass "1111111"
 
+       Query the sensortree with custom credentials for caching prtg current object configuration.
     #>
     [CmdletBinding(DefaultParameterSetName = 'Default', SupportsShouldProcess = $false, ConfirmImpact = 'Low')]
     Param(

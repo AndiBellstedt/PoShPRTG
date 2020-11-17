@@ -7,6 +7,12 @@
        Remove an object from PRTGserver and returns.
        Difference to Get-PRTGObject is, that "Get-PRTGObject" is working on a modfified sensortree variable in the memory and not on livedata from PRTGServer
 
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
+
     .NOTES
        Author: Andreas Bellstedt
 
@@ -18,17 +24,14 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Receive-PRTGObject -ObjectId 1
+       PS C:\>Remove-PRTGObject -ObjectId 1
 
-       Receive-PRTGObject -ID 1
-       Receive-PRTGObject 1
+       Remove object with ID 1
 
     .EXAMPLE
-       Receive-PRTGObject -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+       PS C:\>Get-PRTGObject -ObjectId 1 | Remove-PRTGObject
 
-       Receive-PRTGObject -ID 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
-       Receive-PRTGObject 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
-
+       Remove object with ID 1
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
@@ -98,7 +101,7 @@
                     Write-Log -LogText "Remove object ID $ID ($Server)" -LogType Set -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
                     $Result = Invoke-WebRequest -UseBasicParsing -Uri "$Server/api/deleteobject.htm " -Method Get -Body $Body -Verbose:$false -Debug:$false -ErrorAction Stop
                 } catch {
-                    Write-Error "Failed to delete object $($_.exception.message)"
+                    Write-Log -LogText "Failed to delete object $($_.exception.message)" -LogType Error -LogScope $MyInvocation.MyCommand.Name -Error -NoFileStatus
                     break
                 }
 

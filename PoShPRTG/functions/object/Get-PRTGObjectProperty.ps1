@@ -13,11 +13,14 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Get-PRTGObjectProperty -ObjectId 1 -PropertyName Name, tags
+        Get-PRTGObjectProperty -ObjectId 1 -PropertyName Name, tags
+
+        Get name and tags from object with ID 1
 
     .EXAMPLE
-       Get-PRTGObjectProperty -ID 1 -Name Name, status
+        Get-PRTGObject -Name "Myobject" | Get-PRTGObjectProperty -Name Name, status
 
+        Get name and status from object "Myobject"
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'ReturnAll',
@@ -62,7 +65,7 @@
             $ObjectProperty = $Object | Get-Member -MemberType Property, NoteProperty | Select-Object -ExpandProperty Name
             $hash = @{}
             if ($PropertyName) {
-                #Parameterset: Name
+                # Parameterset: Name
                 foreach ($item in $PropertyName) {
                     $PropertiesToQuery = $ObjectProperty | Where-Object { $_ -like $item }
                     foreach ($PropertyItem in $PropertiesToQuery) {
@@ -85,7 +88,7 @@
             $result = New-Object -TypeName PSCustomObject -Property $hash
 
             Write-Log -LogText "Found $($result.count) $(if($result.count -eq 1){"property"}else{"properties"}) in object ID $ID" -LogType Info -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
-            Write-Output $result
+            $result
         }
     }
 

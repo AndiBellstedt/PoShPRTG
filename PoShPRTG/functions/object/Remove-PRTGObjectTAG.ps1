@@ -6,6 +6,12 @@
     .DESCRIPTION
        Remove a text from the tags property of an PRTG object
 
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
+
     .NOTES
        Author: Andreas Bellstedt
 
@@ -13,8 +19,9 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Remove-PRTGObjectTAG -ObjectId 1 -TAGName "NewName" -Server "https://prtg.corp.customer.com" -User "admin -Pass "1111111"
+       PS C:\>Remove-PRTGObjectTAG -ObjectId 1 -TAGName "MyTAG"
 
+       Remove "MyTAG" from an object with ID 1
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',

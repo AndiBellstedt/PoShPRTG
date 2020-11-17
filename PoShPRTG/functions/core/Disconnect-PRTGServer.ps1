@@ -18,9 +18,14 @@
     .EXAMPLE
        Disconnect-PRTGServer
 
+       Remove connection data, so it disconnects from PRTG Server.
     #>
-    [CmdletBinding(SupportsShouldProcess = $false, ConfirmImpact = 'medium')]
+    [CmdletBinding(
+        SupportsShouldProcess = $false,
+        ConfirmImpact = 'medium'
+    )]
     Param(
+        # Force to disconnect and suppress errors
         [Switch]
         $Force
     )

@@ -2,7 +2,7 @@
 
 #region  PRTG
 $TypeName = "PRTG"
-Write-Verbose "Update TypeData $TypeName"
+Write-PSFMessage -Level Verbose -Message "Update TypeData $TypeName"
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -MemberName ObjID -Value { [int32]$this.id[0] } -Force
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -MemberName Type -Value { $this.LocalName.substring(0, 1).toupper() + $this.LocalName.substring(1).tolower() } -Force
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -MemberName Status -Value {
@@ -34,7 +34,7 @@ Remove-TypeData -TypeName $TypeName
 
 #region  PRTG.SENSORTREE
 $TypeName = "PRTG.SensorTree"
-Write-Verbose "Update TypeData $TypeName"
+Write-PSFMessage -Level Verbose -Message "Update TypeData $TypeName"
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -MemberName ObjID -Value { [int32]$this.prtg.sensortree.nodes.group.id[0] } -Force
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -MemberName Type -Value { $this.prtg.sensortree.nodes.group.LocalName } -Force
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -MemberName Name -Value { $this.prtg.sensortree.nodes.group.name } -Force
@@ -55,7 +55,7 @@ Remove-TypeData -TypeName $TypeName
 
 #region  PRTG.OBJECT
 $TypeName = "PRTG.Object"
-Write-Verbose "Update TypeData $TypeName"
+Write-PSFMessage -Level Verbose -Message "Update TypeData $TypeName"
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -Force -MemberName Fullname -Value {
     $x = $this.id[0]
     $count = 0
@@ -122,7 +122,7 @@ Remove-TypeData -TypeName $TypeName
 #region  PRTG.OBJECT.PROBENODE
 $part = "probenode"
 $TypeName = "PRTG.Object.$($part.substring(0,1).toupper())$($part.substring(1).tolower())"
-Write-Verbose "Update TypeData $TypeName"
+Write-PSFMessage -Level Verbose -Message "Update TypeData $TypeName"
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -MemberName Members -Value {
     $collection = @()
     if ($this.device) { $collection += $this.device }
@@ -137,7 +137,7 @@ Update-TypeData -TypeName $TypeName -DefaultDisplayPropertySet ObjID, Name, Type
 #region  PRTG.OBJECT.GROUP
 $part = "group"
 $TypeName = "PRTG.Object.$($part.substring(0,1).toupper())$($part.substring(1).tolower())"
-Write-Verbose "Update TypeData $TypeName"
+Write-PSFMessage -Level Verbose -Message "Update TypeData $TypeName"
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -MemberName Members -Value {
     $collection = @()
     if ($this.device) { $collection += $this.device }
@@ -152,7 +152,7 @@ Update-TypeData -TypeName $TypeName -DefaultDisplayPropertySet ObjID, Name, Type
 #region  PRTG.OBJECT.DEVICE
 $part = "device"
 $TypeName = "PRTG.Object.$($part.substring(0,1).toupper())$($part.substring(1).tolower())"
-Write-Verbose "Update TypeData $TypeName"
+Write-PSFMessage -Level Verbose -Message "Update TypeData $TypeName"
 Update-TypeData -TypeName $TypeName -DefaultDisplayPropertySet ObjID, Name, Type, Status, Host, Tags, TagsInherited, Active, Priority, CommentExist, DeviceIcon, URL, Sensor, Hierarchy, Fullname -DefaultDisplayProperty ObjID -DefaultKeyPropertySet ObjID -Force
 
 #endregion  PRTG.OBJECT.DEVICE
@@ -161,7 +161,7 @@ Update-TypeData -TypeName $TypeName -DefaultDisplayPropertySet ObjID, Name, Type
 #region  PRTG.OBJECT.SENSOR
 $part = "sensor"
 $TypeName = "PRTG.Object.$($part.substring(0,1).toupper())$($part.substring(1).tolower())"
-Write-Verbose "Update TypeData $TypeName"
+Write-PSFMessage -Level Verbose -Message "Update TypeData $TypeName"
 Update-TypeData -TypeName $TypeName -MemberType ScriptProperty -Force -MemberName IntervalText -Value {
     $timespan = [timespan]::fromseconds($this.interval)
     if ($timespan.TotalDays -ge 1) {
@@ -180,7 +180,7 @@ Update-TypeData -TypeName $TypeName -DefaultDisplayPropertySet ObjID, Name, Type
 #region  PRTG.OBJECT.COMPARE
 $part = "compare"
 $TypeName = "PRTG.Object.$($part.substring(0,1).toupper())$($part.substring(1).tolower())"
-Write-Verbose "Update TypeData $TypeName"
+Write-PSFMessage -Level Verbose -Message "Update TypeData $TypeName"
 Update-TypeData -TypeName $TypeName -DefaultDisplayPropertySet ObjID, Name, SideIndicator, SideIndicatorStatus, SideIndicatorDescription, PropertyDifferenceReport, Fullname -DefaultDisplayProperty Name -DefaultKeyPropertySet ObjID -Force
 
 

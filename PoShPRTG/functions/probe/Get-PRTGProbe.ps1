@@ -30,7 +30,6 @@
        # Piping is also possible
 
     .EXAMPLE
-
        Get-PRTGProbe -ObjectId 1
        Query probes by object ID
 
@@ -40,7 +39,6 @@
 
        1 | Get-PRTGProbe
        # Piping is also possible
-
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'ReturnAll',
@@ -48,6 +46,7 @@
         ConfirmImpact = 'Low'
     )]
     Param(
+        # ID of the PRTG object
         [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'ID', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {$_ -gt 0})]
@@ -55,6 +54,7 @@
         [int[]]
         $ObjectId,
 
+        # Name of the Probe
         [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'Name', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [String[]]
         $Name,
@@ -65,36 +65,37 @@
         $SensorTree = $script:PRTGSensorTree
     )
 
-    Begin {
-        $result = @()
+    begin {
+        $queryParam = @{
+            "Type" = "probenode"
+            "SensorTree" = $SensorTree
+            "Verbose" = $false
+        }
     }
 
-    Process {
+    process {
+        $result = @()
+
         switch ($PsCmdlet.ParameterSetName) {
             'ID' {
                 foreach ($item in $ObjectId) {
-                    New-Variable -Name result -Force
-                    $result += Get-PRTGObject -ObjectID $item -Type probenode -SensorTree $SensorTree -Verbose:$false
-                    Write-Output $result
+                    $result += Get-PRTGObject -ObjectID $item @queryParam
                 }
             }
 
             'Name' {
                 foreach ($item in $Name) {
-                    New-Variable -Name result -Force
-                    $result += Get-PRTGObject -Name $item -Type probenode -SensorTree $SensorTree -Verbose:$false
-                    Write-Output $result
+                    $result += Get-PRTGObject -Name $item @queryParam
                 }
             }
 
             Default {
-                New-Variable -Name result -Force
-                $result = Get-PRTGObject -Type probenode -SensorTree $SensorTree -Verbose:$false
-                Write-Output $result
+                $result = Get-PRTGObject @queryParam
             }
         }
+
+        $result
     }
 
-    End {
-    }
+    end {}
 }

@@ -18,12 +18,15 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Receive-PRTGObject -ObjectId 1 -PropertyName "staus"
-       Receive-PRTGObject -ID 1 -Name "staus"
+        PS C:\>Receive-PRTGObject -ObjectId 1 -PropertyName "staus"
+        PS C:\>Receive-PRTGObject -ID 1 -Name "staus"
+
+        Query property of object 1 live from PRTG server. (not using the value in the sensor tree)
 
     .EXAMPLE
-       Receive-PRTGObject -ObjectId 1 -PropertyName "staus" -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+        PS C:\>Receive-PRTGObject -ObjectId 1 -PropertyName "staus" -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
 
+        Query property of object 1 live from PRTG server. (not using the value in the sensor tree)
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',

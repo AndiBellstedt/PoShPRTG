@@ -33,23 +33,28 @@
         ConfirmImpact = 'Low'
     )]
     Param(
+        # Name of TAG to query objects
         [Parameter(Mandatory = $true, ParameterSetName = 'ByTAGName')]
         [string[]]
         $ByTAGName,
 
+        # Indicates the search is case sensitive
         [Parameter(ParameterSetName = 'ByTAGName')]
         [switch]
         $CaseSensitive,
 
+        # Include inherited
         [Parameter(ParameterSetName = 'ByTAGName')]
         [switch]
         $IncludeInherited,
 
+        # The Status to query on objects
         [Parameter(Mandatory = $true, ParameterSetName = 'ByStatus')]
         [ValidateSet("Unknown", "Scanning", "Up", "Warning", "Down", "No Probe", "Paused by User", "Paused by Dependency", "Paused by Schedule", "Unusual", "Not Licensed", "Paused Until")]
         [string[]]
         $ByStatus,
 
+        # The type of sensor to query
         [Parameter(Mandatory = $true, ParameterSetName = 'BySensorType')]
         [ValidateSet('Cloud HTTP', 'Cloud Ping', 'Serverzustand', 'DNS', 'VMWare Hostserver Hardware-Zustand (SOAP)', 'VMware Hostserver Leistung (SOAP)', 'Exchange Sicherung (Powershell)', 'Exchange Datenbank (Powershell)', 'Exchange Datenbank DAG (Powershell)', 'Exchange Postfach (Powershell)', 'Exchange Nachrichtenwarteschlange (Powershell)', 'Programm/Skript', 'Programm/Skript (Erweitert)', 'Datei-Inhalt', 'Ordner', 'FTP', 'Green IT', 'HTTP', 'HTTP (Erweitert)', 'Hyper-V Freigegebenes Clustervolume', 'IMAP', 'Windows Updates Status (Powershell)', 'Leistungsindikator IIS Anwendungspool', 'Ping', 'POP3', 'Port', 'Zustand der Probe', 'Active Directory Replikationsfehler', 'Windows Druckwarteschlange', 'WSUS-Statistiken', 'RDP (Remote Desktop)', 'Freigaben-Speicherplatz', 'SMTP', 'SNMP Prozessorlast', 'SNMP (Benutzerdef.)', 'SNMP-Zeichenfolge', 'SNMP Dell EqualLogic Physikalischer Datenträger', 'SNMP Dell PowerEdge Physikalischer Datenträger', 'SNMP SonicWALL Systemzustand', 'SNMP Dell PowerEdge Systemzustand', 'SNMP Plattenplatz', 'SNMP-Bibliothek', 'SNMP Linux Durchschnittl. Last', 'SNMP Linux Speicherinfo', 'SNMP Linux Physikalischer Datenträger', 'SNMP Speicher', 'SNMP QNAP Logischer Datenträger', 'SNMP QNAP Physikalischer Datenträger', 'SNMP QNAP Systemzustand', 'SNMP RMON', 'SNMP-Datenverkehr', 'SNMP-Laufzeit', 'SNTP', 'SSL-Sicherheitsüberprüfung', 'SSL-Zertifikatssensor', 'Systemzustand', 'SNMP-Trap-Empfänger', 'VMware Virtual Machine (SOAP)', 'VMware Datastore (SOAP)', 'Ereignisprotokoll (Windows API)', 'WMI Sicherheits-Center', 'WMI Laufwerkskapazität (mehrf.)', 'WMI Ereignisprotokoll', 'WMI Exchange Transportwarteschlange', 'Hyper-V Virtuelle Maschine', 'Hyper-V Host Server', 'Hyper-V Virtuelles Speichergerät', 'Windows IIS-Anwendung', 'WMI Logischer Datenträger E/A BETA', 'WMI Arbeitsspeicher', 'WMI Netzwerkadapter', 'WMI Auslagerungsdatei', 'Windows Physikalischer Datenträger E/A BETA', 'Windows Prozess', 'Windows Prozessorlast', 'WMI Dienst', 'WMI Freigabe', 'WMI Microsoft SQL Server 2012', 'WMI Terminaldienste (Windows 2008+)', 'Windows Systemlaufzeit', 'WMI UTC-Zeit', 'WMI Wichtige Systemdaten (v2)', 'WMI Datenträger')]
         [String[]]
@@ -61,7 +66,7 @@
         $SensorTree = $script:PRTGSensorTree
     )
 
-    Begin {
+    begin {
         $StatusMapping = @{
             "Unknown"              = 1
             "Scanning"             = 2
@@ -165,7 +170,7 @@
         #>
     }
 
-    Process {
+    process {
         switch ($PsCmdlet.ParameterSetName) {
             'ByTAGName' {
                 if ($CaseSensitive -and (-not $IncludeInherited)) {
@@ -173,7 +178,7 @@
                         Write-Log -LogText "Search casesensitive only in 'tags'-property for $TagName in SensorTree" -LogType Query -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
                         New-Variable -Name result -Force -Confirm:$false -Debug:$false -Verbose:$false -WhatIf:$false
                         $result = $SensorTree.SelectNodes("/prtg/sensortree/nodes/group//*[contains(tags,'$($TagName.Replace('*',''))')]")
-                        Write-Output (Set-TypesNamesToPRTGObject -PRTGObject $result)
+                        Set-TypesNamesToPRTGObject -PRTGObject $result
                     }
                 } else {
                     Write-Log -LogText "Search method: caseinsensitive" -LogType Info -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
@@ -186,14 +191,14 @@
                                 Write-Log -LogText "Search caseinsensitive for $TagName in 'tagsAll'-property" -LogType Info -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
                                 if ($Object.tagsAll) {
                                     if ($Object.tagsAll.split(' ') -like $TagName) {
-                                        Write-Output $Object
+                                        $Object
                                     }
                                 }
                             } else {
                                 Write-Log -LogText "Search caseinsensitive for $TagName in 'tags'-property" -LogType Info -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
                                 if ($Object.tags) {
                                     if ($Object.tags.split(' ') -like $TagName) {
-                                        Write-Output $Object
+                                        $Object
                                     }
                                 }
                             }
@@ -207,7 +212,7 @@
                     Write-Log -LogText "Searching for objects by staus $Status" -LogType Query -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
                     New-Variable -Name result -Force -Confirm:$false -Debug:$false -Verbose:$false -WhatIf:$false
                     $result = $SensorTree.SelectNodes("/prtg/sensortree/nodes/group//*[status_raw=$($StatusMapping."$Status")]")
-                    Write-Output (Set-TypesNamesToPRTGObject -PRTGObject $result)
+                    Set-TypesNamesToPRTGObject -PRTGObject $result
                 }
             }
 
@@ -216,11 +221,11 @@
                     Write-Log -LogText "Searching for objects by type $SensorType" -LogType Query -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
                     New-Variable -Name result -Force -Confirm:$false -Debug:$false -Verbose:$false -WhatIf:$false
                     $result = $SensorTree.SelectNodes("/prtg/sensortree/nodes/group//*[sensortype='$("$SensorType")']")
-                    Write-Output (Set-TypesNamesToPRTGObject -PRTGObject $result)
+                    Set-TypesNamesToPRTGObject -PRTGObject $result
                 }
             }
         }
     }
 
-    End {}
+    end {}
 }

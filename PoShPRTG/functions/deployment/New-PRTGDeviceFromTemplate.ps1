@@ -6,6 +6,12 @@
     .DESCRIPTION
        Creates a new device out of a template structure, where operatingsystems and operatingsystem roles are separates in different templates.
 
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
+
     .NOTES
        Author: Andreas Bellstedt
 
@@ -13,12 +19,15 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       New-PRTGDeviceFromTemplate
-       Required values will be queried by gridview-selection
+       New-PRTGDeviceFromTemplate -DeviceName "NewDevice"
+
+       Will create new device "NewDevice".
+       Template information will be queried by Out-GridView.
 
     .EXAMPLE
-       New-PRTGDeviceFromTemplate -TemplateFolderStructure (Get-PRTGObject -Name "Template_group_name") -Destination (Get-PRTGProbes | Out-GridView -Title "Please select destination for new system" -OutputMode Single)
+       New-PRTGDeviceFromTemplate -DeviceName "NewDevice" -HostName "NewDevice.ad.corp.com" -TemplateSystem (Get-PRTGDevice -Name "Template_MyServerOS").ObjId -TemplateRole (Get-PRTGDevice -Name "Template_FileServer").ObjId -Destination (Get-PRTGProbe "NewProbe").ObjId
 
+       Create a new device "NewDevice" from specified Systems.
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
@@ -26,24 +35,30 @@
         ConfirmImpact = 'Medium'
     )]
     Param(
+        # The DisplayName of new system
+        [Parameter(Mandatory=$true)]
         [ValidateNotNullOrEmpty()]
         [String]
-        $DeviceName = (Read-Host -Prompt "Name of new system"),
+        $DeviceName,
 
+        # The actual hostname for new system. If not specified, the DeviceName will be used
         [ValidateNotNullOrEmpty()]
         [String]
-        $Hostname = (Read-Host -Prompt "Hostname for new system (leave empty, if same as name of new system)"),
+        $Hostname,
 
-        [ValidateNotNullOrEmpty()]
+        # The ID for the system that acts as a template
         [int]
         $TemplateSystem = (Get-PRTGObject -Name "Basic operatingsystem" -Recursive -Type device -SensorTree $script:PRTGSensorTree | Sort-Object Fullname | Select-Object fullname, objID | Out-GridView -Title "Please specify operatingsystem for new system" -OutputMode Single | Select-Object -ExpandProperty ObjID),
 
+        # The ID(s) of the template roles to apply to new device
         [int[]]
         $TemplateRole = (Get-PRTGObject -Name "Specific roles" -Recursive -Type device -SensorTree $script:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select roles for new system" -OutputMode Multiple | Select-Object -ExpandProperty ObjID),
 
+        # Filter for sensor names to be excluded from template
         [string[]]
-        $TemplateSensorFilter = "MUSS MANUELL*",
+        $TemplateSensorFilter = "",
 
+        # The ID of the destination group
         [ValidateNotNullOrEmpty()]
         [int]
         $Destination = (Get-PRTGObject -Type group -SensorTree $script:PRTGSensorTree | Sort-Object Fullname | Select-Object FullName, objID | Out-GridView -Title "Please select destination for new system" -OutputMode Single  | Select-Object -ExpandProperty ObjID),

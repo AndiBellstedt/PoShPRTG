@@ -4,22 +4,28 @@
        Enable-PRTGObject
 
     .DESCRIPTION
-       Enables an (paused) PRTG object
+        Enables an (paused) PRTG object
+
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
 
     .NOTES
-       Author: Andreas Bellstedt
+        Author: Andreas Bellstedt
 
-       adopted from PSGallery Module "PSPRTG"
-       Author: Sam-Martin
-       Github: https://github.com/Sam-Martin/prtg-powershell
+        adopted from PSGallery Module "PSPRTG"
+        Author: Sam-Martin
+        Github: https://github.com/Sam-Martin/prtg-powershell
 
     .LINK
-       https://github.com/AndiBellstedt/PoShPRTG
+        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Enable-PRTGObject -ObjectId 1
-       Enable-PRTGObject -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+        Enable-PRTGObject -ObjectId 1
 
+        Enables object with ID 1
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
@@ -28,9 +34,9 @@
     )]
     Param(
         # ID of the object to resume
-        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 } )]
         [Alias('ObjID', 'ID')]
         [int[]]
         $ObjectId,
@@ -45,7 +51,7 @@
 
         # Url for PRTG Server
         [ValidateNotNullOrEmpty()]
-        [ValidateScript({ if (($_.StartsWith("http"))) {$true} else {$false} })]
+        [ValidateScript( { if ($_.StartsWith("http")) { $true } else { $false } } )]
         [String]
         $Server = $script:PRTGServer,
 
@@ -65,18 +71,16 @@
         $SensorTree = $script:PRTGSensorTree
     )
 
-    Begin {
-        $body = @{
-            id       = 0
-            action   = 1
-            username = $User
-            passhash = $Pass
-        }
-    }
+    begin {}
 
-    Process {
+    process {
         foreach ($id in $ObjectId) {
-            $body.id = $id
+            $body = @{
+                id       = $id
+                action   = 1
+                username = $User
+                passhash = $Pass
+            }
 
             $StatusBefore = Receive-PRTGObjectStatus -ObjectID $id -Server $Server -User $User -Pass $Pass -Verbose:$false
             if (-not $StatusBefore) {
@@ -120,5 +124,5 @@
         }
     }
 
-    End {}
+    end {}
 }

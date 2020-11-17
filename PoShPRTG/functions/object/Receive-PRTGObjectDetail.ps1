@@ -1,25 +1,28 @@
 ﻿function Receive-PRTGObjectDetail {
     <#
     .Synopsis
-       Receive-PRTGObjectDetail
+        Receive-PRTGObjectDetail
 
     .DESCRIPTION
-       Query status information for an object directly from PRTGserver.
-       (function not working on sensortree variable in memory)
+        Query status information for an object directly from PRTGserver.
+        (function not working on sensortree variable in memory)
 
     .NOTES
-       Author: Andreas Bellstedt
+        Author: Andreas Bellstedt
 
     .LINK
-       https://github.com/AndiBellstedt/PoShPRTG
+        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Receive-PRTGObjectDetail -ObjectId 1
+        PS C:\>Receive-PRTGObjectDetail -ObjectId 1
+        PS C:\>Receive-PRTGObjectDetail -ID 1
 
-       Receive-PRTGObjectDetail -ID 1
+        Query object details of object 1 live from PRTG server. (not using the value in the sensor tree)
 
     .EXAMPLE
-       Receive-PRTGObjectDetail -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+        PS C:\>Receive-PRTGObjectDetail -ObjectId 1 -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
+
+        Query object details of object 1 live from PRTG server. (not using the value in the sensor tree)
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',

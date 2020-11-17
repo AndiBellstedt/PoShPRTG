@@ -85,7 +85,9 @@
                 + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
                 + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,Write-Log
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "Used with intension")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
+
     [CmdletBinding(
         DefaultParameterSetName = 'VerboseOutput',
         ConfirmImpact = "Low"

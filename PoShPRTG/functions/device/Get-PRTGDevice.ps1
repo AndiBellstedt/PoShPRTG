@@ -14,34 +14,38 @@
 
     .EXAMPLE
        Get-PRTGDevice
+
        Query all devices from the default sensortree (global variable after connect to PRTG server)
 
     .EXAMPLE
        Get-PRTGDevice -SensorTree $SensorTree
+
        Query devices by name from a non default sensortree
 
     .EXAMPLE
        Get-PRTGDevice -Name "Device01"
+
        Query devices by name
 
+    .EXAMPLE
        Get-PRTGDevice -Name "Device01", "Device*"
-       # Multiple names are possible
 
+       Multiple names are possible
+
+    .EXAMPLE
        "Device01" | Get-PRTGDevice
-       # Piping is also possible
+
+       Piping is also possible
 
     .EXAMPLE
        Get-PRTGDevice -ObjectId 1
 
        Query devices by object ID
 
-       Get-PRTGDevice -ObjID 1, 100
-       Get-PRTGDevice -ID 1, 100 -SensorTree $SensorTree
-       # Multiple names are possible
-
+    .EXAMPLE
        1 | Get-PRTGDevice
-       # Piping is also possible
 
+       Piping is also possible
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'ReturnAll',
@@ -49,6 +53,7 @@
         ConfirmImpact = 'Low'
     )]
     Param(
+        # ID of the PRTG object
         [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'ID', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( { $_ -gt 0 })]
@@ -56,6 +61,7 @@
         [int[]]
         $ObjectId,
 
+        # Name of the device
         [Parameter(Position = 0, Mandatory = $true, ParameterSetName = 'Name', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [String[]]
         $Name,
@@ -66,35 +72,38 @@
         $SensorTree = $script:PRTGSensorTree
     )
 
-    Begin {
-        $result = @()
+    begin {
+        $queryParam = @{
+            "Type" = "device"
+            "SensorTree" = $SensorTree
+            "Verbose" = $false
+        }
     }
 
-    Process {
+    process {
+        $result = @()
+
         switch ($PsCmdlet.ParameterSetName) {
             'ID' {
+                New-Variable -Name result -Force
                 foreach ($item in $ObjectId) {
-                    New-Variable -Name result -Force
-                    $result += Get-PRTGObject -ObjectID $item -Type device -SensorTree $SensorTree -Verbose:$false
-                    Write-Output $result
+                    $result += Get-PRTGObject -ObjectID $item @queryParam
                 }
             }
 
             'Name' {
                 foreach ($item in $Name) {
-                    New-Variable -Name result -Force
-                    $result += Get-PRTGObject -Name     $item -Type device -SensorTree $SensorTree -Verbose:$false
-                    Write-Output $result
+                    $result += Get-PRTGObject -Name $item @queryParam
                 }
             }
 
             Default {
-                New-Variable -Name result -Force
-                $result += Get-PRTGObject -Type device -SensorTree $SensorTree -Verbose:$false
-                Write-Output $result
+                $result = Get-PRTGObject @queryParam
             }
         }
+
+        $result
     }
 
-    End {}
+    end {}
 }

@@ -6,6 +6,12 @@
     .DESCRIPTION
        Moves an object in PRTG hierarchy
 
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
+
     .NOTES
        Author: Andreas Bellstedt
 
@@ -13,10 +19,9 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Move-PRTGObject -ObjectId 1 -Direction up
+        Move-PRTGObject -ObjectId 1 -Direction up
 
-       Move-PRTGObject -ObjectId 1 -Direction down -Server "https://prtg.corp.customer.com" -User "admin" -Pass "1111111"
-
+        Move object with ID 1 one position up inside the group/structure
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
@@ -52,26 +57,20 @@
         # Password or PassHash for PRTG Authentication
         [ValidateNotNullOrEmpty()]
         [String]
-        $Pass = $script:PRTGPass,
-
-        # sensortree from PRTG Server
-        [ValidateNotNullOrEmpty()]
-        [xml]
-        $SensorTree = $script:PRTGSensorTree
+        $Pass = $script:PRTGPass
     )
 
-    Begin {
-        $body = @{
-            id       = 0
-            newpos   = $Direction
-            username = $User
-            passhash = $Pass
-        }
-    }
+    begin {}
 
-    Process {
+    process {
         foreach ($id in $ObjectId) {
-            $body.id = $id
+            $body = @{
+                id       = $id
+                newpos   = $Direction
+                username = $User
+                passhash = $Pass
+            }
+
             if ($pscmdlet.ShouldProcess("objID $Id", "Move $Direction")) {
                 try {
                     Write-Log -LogText "Move object ID $id $Direction ($Server)" -LogType Set -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
@@ -83,5 +82,5 @@
         }
     }
 
-    End {}
+    end {}
 }

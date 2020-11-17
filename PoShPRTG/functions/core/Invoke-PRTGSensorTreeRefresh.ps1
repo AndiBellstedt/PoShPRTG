@@ -4,7 +4,7 @@
        Invoke-PRTGSensorTreeRefresh
 
     .DESCRIPTION
-       Get the sensortree from prtg server and refesh the global variable PRTGSensorTree
+       Refreshes sensortree information from prtg server
 
     .NOTES
        Author: Andreas Bellstedt
@@ -13,13 +13,20 @@
        https://github.com/AndiBellstedt/PoShPRTG
 
     .EXAMPLE
-       Get-PRTGSensorTree
+       Invoke-PRTGSensorTreeRefresh
+
+       Refreshes the sensortree for caching current prtg current object configuration.
 
     .EXAMPLE
-       Get-PRTGSensorTree -Server "https://prtg.corp.customer.com" -User "prtgadmin" -Pass "111111"
+       Invoke-PRTGSensorTreeRefresh -Server "https://prtg.corp.customer.com" -User "prtgadmin" -Pass "111111"
 
+       Refreshes the sensortree with custom credentials for caching current prtg current object configuration.
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default', SupportsShouldProcess = $false, ConfirmImpact = 'medium')]
+    [CmdletBinding(
+        DefaultParameterSetName = 'Default',
+        SupportsShouldProcess = $false,
+        ConfirmImpact = 'medium'
+    )]
     Param(
         # Url for PRTG Server
         [ValidateNotNullOrEmpty()]

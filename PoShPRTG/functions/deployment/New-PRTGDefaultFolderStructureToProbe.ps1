@@ -7,6 +7,12 @@
        Copy a new folder/group structure to a destination
        Primary intension is to copy a tempalte folderstructure to a new probe
 
+    .PARAMETER WhatIf
+        If this switch is enabled, no actions are performed but informational messages will be displayed that explain what would happen if the command were to run.
+
+    .PARAMETER Confirm
+        If this switch is enabled, you will be prompted for confirmation before executing any operations that change state.
+
     .NOTES
        Author: Andreas Bellstedt
 
@@ -15,11 +21,19 @@
 
     .EXAMPLE
        New-PRTGDefaultFolderStructureToProbe
+
        Required values will be queried by gridview-selection
 
     .EXAMPLE
        New-PRTGDefaultFolderStructureToProbe -TemplateFolderStructureID (Get-PRTGObject -Name "Template_group_name") -ProbeID (Get-PRTGProbes | Out-GridView -Title "Please select destination probe" -OutputMode Single)
 
+       Creates group (folder) structure in a probe from "Template_group_name".
+       All groups beneath the object "Template_group_name" will be copied to the probe selected by the Out-GridView cmdlet
+
+    .EXAMPLE
+       New-PRTGDefaultFolderStructureToProbe -TemplateFolderStructureID (Get-PRTGGroup -Name "MyTemplateGroup").objId -ProbeID (Get-PRTGProbes "NewProbe").ObjId
+
+       Copy group structure beneath group "MyTemplateGroup" to the probe "NewProbe"
     #>
     [CmdletBinding(
         DefaultParameterSetName = 'Default',
@@ -27,12 +41,12 @@
         ConfirmImpact = 'Medium'
     )]
     Param(
-        #ID of the group that contains the structure to be copied to the destination probe
+        # ID of the group that contains the structure to be copied to the destination probe
         [ValidateNotNullOrEmpty()]
         [int]
         $TemplateFolderStructureID = (Get-PRTGObject -Name "Groups for new customer" -Type group -SensorTree $script:PRTGSensorTree -Verbose:$false | Select-Object -ExpandProperty ObjID),
 
-        #ID of the destination probe
+        # ID of the destination probe
         [ValidateNotNullOrEmpty()]
         [int]
         $ProbeID = (Get-PRTGProbe -SensorTree $script:PRTGSensorTree -Verbose:$false | Sort-Object fullname | Select-Object Name, objID | Out-GridView -Title "Please select destination probe" -OutputMode Single | Select-Object -ExpandProperty ObjID),
