@@ -1,0 +1,25 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{5054146A-5065-4E51-B7EB-B74EA57467DA}") = "PoShPRTG", "PoShPRTG\PoShPRTG.csproj", "{8F4F7CFB-50D1-4FCF-AEC4-CFC2BEA22ADE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F4F7CFB-50D1-4FCF-AEC4-CFC2BEA22ADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F4F7CFB-50D1-4FCF-AEC4-CFC2BEA22ADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F4F7CFB-50D1-4FCF-AEC4-CFC2BEA22ADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F4F7CFB-50D1-4FCF-AEC4-CFC2BEA22ADE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {15884AB8-E6E5-4512-91A1-3C40AA2625AB}
+	EndGlobalSection
+EndGlobal
