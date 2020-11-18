@@ -1,7 +1,7 @@
 
 # ![logo][] PowerShell for PRTG - PoShPRTG
 | Plattform | Information |
-|- |-|-|
+| --------- | ----------- |
 | PowerShell gallery | [![PowerShell Gallery](https://img.shields.io/powershellgallery/v/PoShPRTG?label=psgallery)](https://www.powershellgallery.com/packages/PoShPRTG) [![PowerShell Gallery](https://img.shields.io/powershellgallery/p/PoShPRTG)](https://www.powershellgallery.com/packages/PoShPRTG) [![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/PoShPRTG?style=plastic)](https://www.powershellgallery.com/packages/PoShPRTG) |
 | GitHub  | [![GitHub release](https://img.shields.io/github/release/AndiBellstedt/PoShPRTG.svg)](https://github.com/AndiBellstedt/PoShPRTG/releases/latest) ![GitHub](https://img.shields.io/github/license/AndiBellstedt/PoShPRTG?style=plastic) <br> ![GitHub issues](https://img.shields.io/github/issues-raw/AndiBellstedt/PoShPRTG?style=plastic) <br> ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/AndiBellstedt/PoShPRTG/master?label=last%20commit%3A%20master&style=plastic) <br> ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/AndiBellstedt/PoShPRTG/development?label=last%20commit%3A%20development&style=plastic) |
 <br>
