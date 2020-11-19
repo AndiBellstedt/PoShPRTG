@@ -1,9 +1,9 @@
 ﻿@{
     # Script module or binary module file associated with this manifest
-    ModuleToProcess       = 'PoShPRTG.psm1'
+    RootModule            = 'PoShPRTG.psm1'
 
     # Version number of this module.
-    ModuleVersion         = '1.5.1.0'
+    ModuleVersion         = '1.5.1.1'
 
     # ID used to uniquely identify this module
     GUID                  = '2dd57587-dbe7-4f17-a5fb-3c9d9999af76'
@@ -117,7 +117,19 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('PoShPRTG', 'PSPRTG', 'PRTG', 'PRTGNetworkMonitor', 'PRTG_Network_Monitor', 'PowerShell', 'Automation', 'Management', 'Monitoring')
+            Tags         = @(
+                'PoShPRTG',
+                'PSPRTG',
+                'PRTG',
+                'PRTGNetworkMonitor',
+                'PRTG_Network_Monitor',
+                'PowerShell',
+                'Automation',
+                'Management',
+                'Monitoring',
+                'PSEdition_Desktop',
+                'Windows'
+            )
 
             # A URL to the license for this module.
             LicenseUri   = 'https://github.com/AndiBellstedt/PoShPRTG/blob/master/license'
