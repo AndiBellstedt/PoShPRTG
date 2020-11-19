@@ -6,3 +6,8 @@ Partial translations are acceptable - when missing a current language message,
 it will fallback to English or another available language.
 #>
 Import-PSFLocalizedString -Path "$($script:ModuleRoot)\en-us\*.psd1" -Module 'PoShPRTG' -Language 'en-US'
+
+$script:PRTGSession = ""
+[String]$script:PRTGServer = ""
+[String]$script:PRTGUser = ""
+[String]$script:PRTGPass = ""

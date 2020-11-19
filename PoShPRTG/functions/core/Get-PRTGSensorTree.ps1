@@ -40,16 +40,21 @@
         [String]
         $Pass = $script:PRTGPass
     )
+
     $body = @{
         username = $User
         passhash = $Pass
     }
 
     Write-Log -LogText "Getting PRTG SensorTree from PRTG Server $($Server)" -LogType Query -LogScope $MyInvocation.MyCommand.Name -NoFileStatus -DebugOutput
-    [xml]$Result = Invoke-RestMethod -Uri "$Server/api/table.xml?content=sensortree" -Body $body -ErrorAction Stop -Verbose:$false
+    #[xml]$Result = Invoke-RestMethod -Uri "$Server/api/table.xml?content=sensortree" -Body $body -ErrorAction Stop -Verbose:$false
 
-    $Result.pstypenames.Insert(0, "PRTG.SensorTree")
-    $Result.pstypenames.Insert(1, "PRTG")
+    $webresult = Invoke-WebRequest -Uri "$Server/api/table.xml?content=sensortree" -Body $body -UseBasicParsing
+    $content = $webresult.Content
+    [xml]$result = $content
 
-    return $Result
+    $result.pstypenames.Insert(0, "PRTG.SensorTree")
+    $result.pstypenames.Insert(1, "PRTG")
+
+    return $result
 }
