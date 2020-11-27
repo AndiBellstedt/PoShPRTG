@@ -114,7 +114,6 @@
                 $User = $credential.UserName
             }
             $pass = $credential.GetNetworkCredential().Password
-            $pass = "Was auch immer das sein soll!2"
 
             Write-PSFMessage -Level Verbose -Message "Authenticate user '$($User)' to PRTG server '$($Prefix)$($server)'" -Tag "Connection"
             $Hash = Invoke-WebRequest -Uri "$($prefix)$($server)/api/getpasshash.htm?username=$($User)&password=$($Pass)" -Verbose:$false -Debug:$false -ErrorAction Stop | Select-Object -ExpandProperty content
