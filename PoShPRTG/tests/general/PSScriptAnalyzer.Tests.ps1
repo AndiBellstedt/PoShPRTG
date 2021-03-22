@@ -4,10 +4,14 @@ Param (
     $SkipTest,
 
     [string[]]
-    $CommandPath = @("$global:testroot\..\functions", "$global:testroot\..\internal\functions")
+    $CommandPath
 )
 
 if ($SkipTest) { return }
+
+if(-not $CommandPath) {
+    [string[]]$CommandPath = @("$global:testroot\..\functions", "$global:testroot\..\internal\functions")
+}
 
 $global:__pester_data.ScriptAnalyzer = New-Object System.Collections.ArrayList
 
