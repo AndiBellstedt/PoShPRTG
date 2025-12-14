@@ -41,7 +41,7 @@
 
     # Processor architecture (None, X86, Amd64) required by this module
     ProcessorArchitecture = 'None'
--
+
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @('bin\PoShPRTG.dll')
 
