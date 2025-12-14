@@ -95,7 +95,7 @@
 
     process {
         if ($Server -match '//') {
-            if($Server -match '\/\/(?<Server>(\w+|\.)+)'){ $Server = $Matches["Server"] }
+            if ($Server -match '\/\/(?<Server>(\w+|\.)+)') { $Server = $Matches["Server"] }
             Remove-Variable -Name Matches -Force -Verbose:$false -Debug:$false -Confirm:$false
         }
 
@@ -116,7 +116,7 @@
             $pass = $credential.GetNetworkCredential().Password
 
             Write-PSFMessage -Level Verbose -Message "Authenticate user '$($User)' to PRTG server '$($Prefix)$($server)'" -Tag "Connection"
-            $Hash = Invoke-WebRequest -Uri "$($prefix)$($server)/api/getpasshash.htm?username=$($User)&password=$($Pass)" -Verbose:$false -Debug:$false -ErrorAction Stop | Select-Object -ExpandProperty content
+            $Hash = Invoke-WebRequest -Uri "$($prefix)$($server)/api/getpasshash.htm?username=$($User)&password=$($Pass)" -UseBasicParsing -Verbose:$false -Debug:$false -ErrorAction Stop | Select-Object -ExpandProperty content
         }
 
         Write-PSFMessage -Level System -Message "Creating PoShPRTG.Connection" -Tag "Connection"
