@@ -138,7 +138,7 @@
             ProjectUri   = 'https://github.com/AndiBellstedt/PoShPRTG'
 
             # A URL to an icon representing this module.
-            IconUri      = 'https://github.com/AndiBellstedt/PoShPRTG/blob/master/asstes/PoShPrtg_128x128.png'
+            IconUri      = 'https://github.com/AndiBellstedt/PoShPRTG/blob/master/assets/PoShPrtg_128x128.png'
 
             # ReleaseNotes of this module
             ReleaseNotes = 'https://github.com/AndiBellstedt/PoShPRTG/blob/master/PoShPRTG/changelog.md'
