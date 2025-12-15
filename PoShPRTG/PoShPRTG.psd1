@@ -3,7 +3,7 @@
     RootModule            = 'PoShPRTG.psm1'
 
     # Version number of this module.
-    ModuleVersion         = '1.5.1.1'
+    ModuleVersion         = '1.5.2.0'
 
     # ID used to uniquely identify this module
     GUID                  = '2dd57587-dbe7-4f17-a5fb-3c9d9999af76'
